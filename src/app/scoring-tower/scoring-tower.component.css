@@ -1,0 +1,26 @@
+.container {
+  min-height: 100vh;
+  background-color: rgb(79, 78, 78);
+  color: white;
+}
+
+/* .table {
+  background-color: grey;
+  color: white;
+} */
+
+.mat-column-name { 
+  max-width: 60px !important;
+  font-size: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-family: 'formula1', 'arial', sans-serif;
+}
+
+.mat-column-position { 
+  font-size: 10px;
+}
+
+.mat-column-score { 
+  font-size: 10px;
+}

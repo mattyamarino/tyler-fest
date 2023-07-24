@@ -11,6 +11,7 @@ export class ScoringTowerComponent implements OnInit {
 
   @Input()
   users!: User[];
+  displayedColumns: string[] = ['position', 'name', 'score'];
 
   constructor() { }
 

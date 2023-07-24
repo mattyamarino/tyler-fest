@@ -1,0 +1,35 @@
+
+<div *ngFor="let stunt of stunts">
+  <div class="stunt-card" (click)="openCard(stunt)">
+  
+    <mat-grid-list cols="4" rowHeight="15px">
+      <mat-grid-tile colspan="1" rowspan="3">
+        <mat-icon [svgIcon]="stunt.icon" class="icon"></mat-icon>
+      </mat-grid-tile>
+  
+  
+      <mat-grid-tile colspan="3" rowspan="2">
+          <span class="stunt-label">
+            {{stunt.name}}
+          </span>
+      </mat-grid-tile>
+  
+  
+      <mat-grid-tile colspan="3" rowspan="1">
+        <span *ngFor="let box of counter(6); let i = index">
+          <span *ngIf="isChecked(stunt, i)">
+            <mat-icon svgIcon="checkbox" class="checkbox-icon"></mat-icon>
+          </span>
+          <span *ngIf="!isChecked(stunt, i) && (i + 1) <= stunt.maxUses">
+            <mat-icon svgIcon="unchecked" class="checkbox-icon"></mat-icon>
+          </span>
+          <span *ngIf="(i + 1) > stunt.maxUses">
+            <mat-icon svgIcon="temp" class="checkbox-icon"></mat-icon>
+          </span>
+        </span>      
+      </mat-grid-tile>
+  
+    </mat-grid-list>
+
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.icon {
+  transform: scale(1.45);
+  padding-right: 3px;
+}
+
+.checkbox-icon {
+  transform: scale(0.4);
+}
+
+.stunt-card {
+  min-width: 70%;
+  margin: 25px;
+  background-color: rgb(255, 145, 0);
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 4px 8px rgb(79, 78, 78);
+}
+
+.stunt-label {
+  color:  rgb(79, 78, 78);
+  justify-content: left;
+  font-size: 12px;
+  font-family: 'lemon_bold', 'arial', sans-serif;
+}

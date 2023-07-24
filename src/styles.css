@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { padding: 0; margin: 0;} 
+
+@font-face {
+  font-family: formula1;
+  src: url(assets/formula1.ttf) format("opentype");
+}
+
+@font-face {
+  font-family: lemon_med;
+  src: url(assets/lemon_med.otf) format("opentype");
+}
+
+@font-face {
+  font-family: lemon_bold;
+  src: url(assets/lemon_bold.otf) format("opentype");
+}
+

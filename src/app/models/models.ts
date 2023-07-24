@@ -1,12 +1,13 @@
 export class User {
-  id!: string;
+  id?: string;
   firstName!:  string;
   abreviation!: string;
-  score?: number;
+  score?: number = 0;
+  position?: number;
 }
 
 export class PerformStunt {
-  id!: string;
+  id?: string;
   userId!: string;
   witnessId!: string;
   stuntId!: string;
@@ -15,10 +16,12 @@ export class PerformStunt {
 }
 
 export class Stunt {
-  id!: string;
+  id?: string;
   name!: string;
-  description!: string;
+  rules!: string;
   maxUses!: number;
   points!: number;
+  icon!: string;
+  completions?: number
 }
 
