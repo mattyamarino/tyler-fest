@@ -4,10 +4,11 @@
   color: white;
 }
 
-/* .table {
-  background-color: grey;
-  color: white;
-} */
+.active-user {
+  color: rgb(127, 227, 255);
+  font-weight: 600;
+  text-shadow: white 1px 0 10px;
+}
 
 .mat-column-name { 
   max-width: 60px !important;

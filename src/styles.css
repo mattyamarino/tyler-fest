@@ -17,3 +17,19 @@ html, body { padding: 0; margin: 0;}
   src: url(assets/lemon_bold.otf) format("opentype");
 }
 
+
+.stunt-label {
+  color:  rgb(79, 78, 78);
+  font-size: 10px;
+  padding-bottom: 3px;
+  font-family: 'lemon_bold', 'arial', sans-serif;
+}
+
+.icon {
+  transform: scale(1.45);
+  padding-right: 3px;
+}
+
+.checkbox-icon {
+  transform: scale(0.4);
+}

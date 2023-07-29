@@ -8,6 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatIconModule} from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
+
 
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
@@ -17,6 +25,8 @@ import { AppComponent } from './app.component';
 import { ScoringTowerComponent } from './scoring-tower/scoring-tower.component';
 import { ParentComponent } from './parent/parent.component';
 import { StuntListComponent } from './stunt-list/stunt-list.component';
+import { StuntFormComponent } from './stunt-form/stunt-form.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 
 
@@ -25,7 +35,9 @@ import { StuntListComponent } from './stunt-list/stunt-list.component';
     AppComponent,
     ScoringTowerComponent,
     ParentComponent,
-    StuntListComponent
+    StuntListComponent,
+    StuntFormComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +49,12 @@ import { StuntListComponent } from './stunt-list/stunt-list.component';
     AngularFireStorageModule,
     MatIconModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatSnackBarModule,
     
   ],
   providers: [],

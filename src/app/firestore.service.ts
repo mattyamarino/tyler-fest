@@ -47,17 +47,5 @@ export class FirestoreService {
         console.error("Error adding document: ", error);
       });
     });
-
-    performs.forEach(perform => {
-      this.firestore.collection('performStunts')
-      .add(perform)
-      .then((docRef) => {
-        console.log("Item History written with ID: ", docRef.id);
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
-    });
-
   }
 }

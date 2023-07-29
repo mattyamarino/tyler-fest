@@ -1,0 +1,60 @@
+
+<div class="container">
+
+  <mat-grid-list cols="5" rowHeight="15px">
+
+    <mat-grid-tile colspan="1" rowspan="3">
+      <mat-icon [svgIcon]="activeStunt.icon" class="icon"></mat-icon>
+    </mat-grid-tile>
+
+    <mat-grid-tile colspan="3" rowspan="2">
+        <span class="stunt-label">
+          {{activeStunt.name}}
+        </span>
+    </mat-grid-tile>
+
+    <mat-grid-tile colspan="1" rowspan="3">
+      <div (click)="closeStunt()">
+        <mat-icon>close</mat-icon>
+      </div>
+    </mat-grid-tile>
+
+    <mat-grid-tile colspan="3" rowspan="1">
+      <span *ngFor="let box of counter(activeStunt.maxUses); let i = index">
+        <span *ngIf="i + 1 <= activeStunt.completions!">
+          <mat-icon svgIcon="checkbox" class="checkbox-icon"></mat-icon>
+        </span>
+        <span *ngIf="i + 1 > activeStunt.completions!">
+          <mat-icon svgIcon="unchecked" class="checkbox-icon"></mat-icon>
+        </span>
+      </span>      
+    </mat-grid-tile>
+
+  </mat-grid-list>
+
+  <div class="rules">
+    {{ activeStunt.rules }}
+  </div>
+
+  <div *ngIf="activeStunt.completions! < activeStunt.maxUses">
+    <form [formGroup]="stuntForm" (ngSubmit)="onSubmit()"> 
+      <mat-form-field class="select">
+        <mat-label class="label">Witness</mat-label>
+        <mat-select formControlName="witness" placeholder="select a witness" >
+          <mat-option *ngFor="let user of userNames" [value]="user" class="label">
+            {{user}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="select">
+        <br><br>
+        <mat-label class="label">What or Where it Happened</mat-label>
+        <textarea matInput placeholder="" formControlName="description"></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="button">
+        <span class="button-label">Submit</span>
+      </button>
+    </form>
+  </div>
+</div>

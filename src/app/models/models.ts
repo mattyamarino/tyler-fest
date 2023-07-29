@@ -4,6 +4,8 @@ export class User {
   abreviation!: string;
   score?: number = 0;
   position?: number;
+  loggedIn?: boolean;
+  performances?: PerformStunt[];
 }
 
 export class PerformStunt {

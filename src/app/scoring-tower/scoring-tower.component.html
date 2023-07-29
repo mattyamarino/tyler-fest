@@ -9,7 +9,11 @@
   
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let user"> {{user.abreviation}} </td>
+      <td mat-cell *matCellDef="let user">
+        <span [ngClass]="{'active-user': user.loggedIn}">
+          {{user.abreviation}} 
+        </span>
+      </td>
     </ng-container>
   
     <ng-container matColumnDef="score">

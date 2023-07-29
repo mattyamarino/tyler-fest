@@ -4,8 +4,15 @@
       <app-scoring-tower [users]="users"></app-scoring-tower>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
-      <div class="stunt-list-container">
-        <app-stunt-list (stuntEvent)="toggleStunt($event)" [stunts]="stunts"></app-stunt-list>
+      <div class="stunt-list-container" *ngIf="activeStunt === null">
+        <app-stunt-list (stuntEvent)="toggleStunt($event.id!)" [stunts]="stunts"></app-stunt-list>
+      </div>
+      <div class="stunt-list-container" *ngIf="activeStunt !== null">
+        <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
+        [activeStunt]="activeStunt" 
+        [activeUser]="activeUser"
+        [users]="users">
+      </app-stunt-form>
       </div>
     </mat-grid-tile>
   </mat-grid-list>

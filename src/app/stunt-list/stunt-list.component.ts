@@ -49,8 +49,25 @@ export class StuntListComponent implements OnInit {
     this.stuntEvent.emit(stunt);
   }
 
-  isChecked(stunt: Stunt, index: number): boolean {
-    return (index + 1) < stunt.completions!
+  isChecked(stunt: Stunt, index: number): number {
+    let maxSlots = 0;
+    
+    switch (stunt.maxUses) {
+      case 1: maxSlots = 6; break;
+      case 2: maxSlots = 5; break;
+      case 3: maxSlots = 4; break;
+      case 4: maxSlots = 3; break;
+      case 5: maxSlots = 2; break;
+      default: maxSlots = 1;
+    }
+
+    if((index + 1) < (maxSlots)) {
+      return 2;
+    } else if (stunt.completions !== 0 && ((index + 1) - (6 - stunt.maxUses) <= stunt.completions!)) {
+      return 1;
+    }
+    return 0;
   }
+
 
 }
