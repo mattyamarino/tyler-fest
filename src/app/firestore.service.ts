@@ -11,15 +11,25 @@ export class FirestoreService {
 
 
   getUsers() {
-    return this.firestore.collection('users').get();
+    return this.firestore.collection('users').valueChanges({ idField: 'id' });
   }
 
   getStunts() {
     return this.firestore.collection('stunts').get();
   }
 
-  getPerformStunts() {
-    return this.firestore.collection('performStunts').get();
+  updateUserStunts(id: string, performs: PerformStunt[]) {
+    const jsonStr = JSON.stringify(performs);
+
+    return this.firestore.collection('users').doc(id).update({
+      jsonPerforms: jsonStr
+    })
+      .then(() => {
+        console.log("User " + id + " successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
   }
 
 

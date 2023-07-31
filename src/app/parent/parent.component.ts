@@ -146,74 +146,72 @@ export class ParentComponent implements OnInit {
   }
 
   getData(): void {
-    let userData = this.firestoreService.getUsers();
-    let stuntData = this.firestoreService.getStunts();
-    let performData = this.firestoreService.getPerformStunts();
+    this.firestoreService.getUsers().subscribe(async userRes => {
+      let unformattedUsers = <User[]>userRes;
+      if (this.stunts.length === 0) {
+        this.firestoreService.getStunts().subscribe(stuntRes => {
 
-    forkJoin([userData, stuntData, performData]).subscribe((res) => {
-      res[0].docs.forEach(doc => {
-        let user = <User>doc.data();
-        user.id = doc.id;
-        user.score = 0;
-        this.users.push(user);
-      });
-      res[1].docs.forEach(doc => {
-        let stunt = <Stunt>doc.data();
-        stunt.id = doc.id;
-        stunt.completions = 0;
-        this.stunts.push(stunt);
-      });
-
-      // TEMP CODE
-      this.activeUser = this.users[1];
-
-      this.initializeMaps();
-      this.initializePerformStunts();
-      this.transformUsersForScoreboard();
-
-      console.log(this.users)
-
-      this.loading = false;
-    });
-  }
-
-  initializeMaps(): void {
-    this.stunts.forEach((stunt) => {
-      this.stuntMap.set(<string>stunt.id, stunt);
-    });
-  }
-
-  initializePerformStunts(): void {
-    this.users.forEach((user: User) => {
-      if(user.performances === undefined) {
-        user.performances = [];
+          stuntRes.docs.forEach(doc => {
+            let stunt = <Stunt>doc.data();
+            stunt.id = doc.id;
+            stunt.completions = 0;
+            this.stunts.push(stunt);
+            this.stuntMap.set(<string>stunt.id, stunt);
+          });
+          this.initializeUsers(unformattedUsers);
+        });
+      } else {
+        this.initializeUsers(unformattedUsers);
       }
+    });
+  }
 
-      user.performances.forEach((performance: PerformStunt) => {
+  initializeUsers(unformattedUsers: User[]): void {
+    // TEMP CODE
+    this.activeUser = unformattedUsers[1];
+
+    this.initializePerformStunts(unformattedUsers);
+    this.transformUsersForScoreboard(unformattedUsers);
+
+    this.users = unformattedUsers;
+
+    this.loading = false;
+  }
+
+  initializePerformStunts(userList: User[]): User[] {
+    userList.forEach((user: User) => {
+      user.performances = user.jsonPerforms ? JSON.parse(user.jsonPerforms) : [];
+      user.score = 0;
+
+      user.performances!.forEach((performance: PerformStunt) => {
         let points = this.stuntMap.get(performance.stuntId)!.points;
         let completions = this.stuntMap.get(performance.stuntId)!.completions;
         this.stuntMap.get(performance.stuntId)!.completions = completions ? completions + 1 : 1;
-        user.score = user.score ? user.score + points : points;
+        user.score = user.score! + points;
       });
     });
+
+    return userList
   }
 
-  transformUsersForScoreboard(): void {
+  transformUsersForScoreboard(userList: User[]): User[] {
     this.stunts = Array.from(this.stuntMap.values());
-    this.users.sort((a,b) => {  return b.score! - a.score!;  });
+    userList.sort((a, b) => { return b.score! - a.score!; });
     let tiedPosition = 0;
-    this.users.forEach((user: User, index: number) => {
-      if(this.users[index - 1] && this.users[index -1].score === user.score) {
+    userList.forEach((user: User, index: number) => {
+      if (userList[index - 1] && userList[index - 1].score === user.score) {
         user.position = tiedPosition + 1;
       } else {
         tiedPosition = index;
         user.position = index + 1;
       }
 
-      if(this.activeUser.id === user.id) {
+      if (this.activeUser.id === user.id) {
         user.loggedIn = true;
       }
     });
+
+    return userList;
   }
 
   toggleStunt(stuntId: string): void {

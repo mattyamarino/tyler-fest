@@ -6,11 +6,10 @@ export class User {
   position?: number;
   loggedIn?: boolean;
   performances?: PerformStunt[];
+  jsonPerforms?: string;
 }
 
 export class PerformStunt {
-  id?: string;
-  userId!: string;
   witnessId!: string;
   stuntId!: string;
   description!: string;

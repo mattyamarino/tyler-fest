@@ -4,6 +4,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../snackbar/snackbar.component';
+import { FirestoreService } from '../firestore.service';
 
 
 @Component({
@@ -23,7 +25,7 @@ export class StuntFormComponent implements OnInit{
   users: User[] = [];
 
   @Output() 
-  stuntEvent = new EventEmitter<PerformStunt>();
+  stuntEvent = new EventEmitter<Stunt>();
 
   performStunt: PerformStunt =  new PerformStunt();
 
@@ -34,22 +36,29 @@ export class StuntFormComponent implements OnInit{
 
   userNames: string[] = [];
 
-  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {}
+  bystander = 'Some Rando';
+
+  saving = false;
+
+  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar, private firestoreService: FirestoreService) {}
 
   ngOnInit(): void {
-    this.filterActiveUser();
+    this.initializeUserNames();
   }
 
-  filterActiveUser(): void {
+  initializeUserNames(): void {
     this.users.forEach((user) => {
       if(this.activeUser.id !== user.id) {
         this.userNames.push(user.firstName);
       }
     });
+
+    this.userNames.sort();
+    this.userNames.push(this.bystander);
   }
 
   closeStunt(): void {
-    this.stuntEvent.emit(this.performStunt);
+    this.stuntEvent.emit(this.activeStunt);
   }
 
   counter(i: number) {
@@ -60,12 +69,45 @@ export class StuntFormComponent implements OnInit{
     console.log(this.stuntForm)
   }
 
+  isDisabled(): boolean {
+    return this.stuntForm.get('witness')?.value === '' || this.stuntForm.get('description')?.value === '' ? true : false;
+  }
+
   onSubmit() {
-    this._snackBar.open("message", "action", {
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      duration: 3000
+    if(!this.saving) {
+      this.saving = true;
+
+      this.performStunt.witnessId = this.getUserId(this.stuntForm.get('witness')!.value!)!;
+      this.performStunt.description = this.stuntForm.get('description')!.value!
+      this.performStunt.stuntId = this.activeStunt.id!
+      this.performStunt.timestamp = Date.now();
+
+      this.activeUser.performances?.push(this.performStunt);
+
+      this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
+
+      this._snackBar.openFromComponent(SnackbarComponent, {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 2500
+      });
+    }
+  }
+
+  getUserId(name: string) {
+    if(name === this.bystander) {
+      return 'bystander';
+    }
+
+    let retStr
+
+    this.users.forEach((user) => {
+      if(user.firstName === name) {
+        retStr = user.id
+      }
     });
+
+    return retStr;
   }
 
   deletePerformStunt() {

@@ -40,19 +40,19 @@
     <form [formGroup]="stuntForm" (ngSubmit)="onSubmit()"> 
       <mat-form-field class="select">
         <mat-label class="label">Witness</mat-label>
-        <mat-select formControlName="witness" placeholder="select a witness" >
+        <mat-select formControlName="witness" placeholder="select a witness" class="label">
           <mat-option *ngFor="let user of userNames" [value]="user" class="label">
             {{user}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="select">
+      <mat-form-field class="select label">
         <br><br>
         <mat-label class="label">What or Where it Happened</mat-label>
-        <textarea matInput placeholder="" formControlName="description"></textarea>
+        <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="button">
+      <button mat-raised-button color="primary" class="button" [disabled]="isDisabled()">
         <span class="button-label">Submit</span>
       </button>
     </form>
