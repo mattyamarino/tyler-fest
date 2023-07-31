@@ -32,7 +32,7 @@ export class StuntListComponent implements OnInit {
 
     this.matIconRegistry.addSvgIcon(
       'checkbox',
-      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/icons/check-box.svg")
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/icons/checkbox.svg")
     );
 
     this.matIconRegistry.addSvgIcon(
@@ -63,7 +63,7 @@ export class StuntListComponent implements OnInit {
 
     if((index + 1) < (maxSlots)) {
       return 2;
-    } else if (stunt.completions !== 0 && ((index + 1) - (6 - stunt.maxUses) <= stunt.completions!)) {
+    } else if (stunt.completions!.size !== 0 && ((index + 1) - (6 - stunt.maxUses) <= stunt.completions!.size)) {
       return 1;
     }
     return 0;

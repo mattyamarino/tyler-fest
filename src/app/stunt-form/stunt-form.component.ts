@@ -91,6 +91,8 @@ export class StuntFormComponent implements OnInit{
         verticalPosition: 'top',
         duration: 2500
       });
+
+      this.stuntEvent.emit(this.activeStunt);
     }
   }
 
@@ -108,6 +110,10 @@ export class StuntFormComponent implements OnInit{
     });
 
     return retStr;
+  }
+
+  getPointStr(): string {
+    return this.activeStunt.points !== 1 ? 'pts' : 'pt'
   }
 
   deletePerformStunt() {

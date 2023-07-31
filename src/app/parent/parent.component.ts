@@ -154,7 +154,7 @@ export class ParentComponent implements OnInit {
           stuntRes.docs.forEach(doc => {
             let stunt = <Stunt>doc.data();
             stunt.id = doc.id;
-            stunt.completions = 0;
+            stunt.completions = new Set();
             this.stunts.push(stunt);
             this.stuntMap.set(<string>stunt.id, stunt);
           });
@@ -167,8 +167,10 @@ export class ParentComponent implements OnInit {
   }
 
   initializeUsers(unformattedUsers: User[]): void {
-    // TEMP CODE
-    this.activeUser = unformattedUsers[1];
+    if(this.activeUser.id === undefined) {
+      // TEMP CODE
+      this.activeUser = unformattedUsers[1];
+    }
 
     this.initializePerformStunts(unformattedUsers);
     this.transformUsersForScoreboard(unformattedUsers);
@@ -179,26 +181,21 @@ export class ParentComponent implements OnInit {
   }
 
   initializePerformStunts(userList: User[]): User[] {
-    userList.forEach((user: User) => {
+    let tiedPosition = 0;
+
+    userList.forEach((user: User, index: number) => {
       user.performances = user.jsonPerforms ? JSON.parse(user.jsonPerforms) : [];
       user.score = 0;
 
       user.performances!.forEach((performance: PerformStunt) => {
         let points = this.stuntMap.get(performance.stuntId)!.points;
-        let completions = this.stuntMap.get(performance.stuntId)!.completions;
-        this.stuntMap.get(performance.stuntId)!.completions = completions ? completions + 1 : 1;
+
+        this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
+        
         user.score = user.score! + points;
       });
-    });
 
-    return userList
-  }
 
-  transformUsersForScoreboard(userList: User[]): User[] {
-    this.stunts = Array.from(this.stuntMap.values());
-    userList.sort((a, b) => { return b.score! - a.score!; });
-    let tiedPosition = 0;
-    userList.forEach((user: User, index: number) => {
       if (userList[index - 1] && userList[index - 1].score === user.score) {
         user.position = tiedPosition + 1;
       } else {
@@ -211,6 +208,12 @@ export class ParentComponent implements OnInit {
       }
     });
 
+    return userList
+  }
+
+  transformUsersForScoreboard(userList: User[]): User[] {
+    this.stunts = Array.from(this.stuntMap.values());
+    userList.sort((a, b) => { return b.score! - a.score!; });
     return userList;
   }
 

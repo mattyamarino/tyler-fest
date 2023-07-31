@@ -21,10 +21,10 @@
 
     <mat-grid-tile colspan="3" rowspan="1">
       <span *ngFor="let box of counter(activeStunt.maxUses); let i = index">
-        <span *ngIf="i + 1 <= activeStunt.completions!">
+        <span *ngIf="i + 1 <= activeStunt.completions!.size">
           <mat-icon svgIcon="checkbox" class="checkbox-icon"></mat-icon>
         </span>
-        <span *ngIf="i + 1 > activeStunt.completions!">
+        <span *ngIf="i + 1 > activeStunt.completions!.size">
           <mat-icon svgIcon="unchecked" class="checkbox-icon"></mat-icon>
         </span>
       </span>      
@@ -32,11 +32,15 @@
 
   </mat-grid-list>
 
+  <div class="points">
+    {{ activeStunt.points }}{{ getPointStr() }}
+  </div>
+
   <div class="rules">
     {{ activeStunt.rules }}
   </div>
 
-  <div *ngIf="activeStunt.completions! < activeStunt.maxUses">
+  <div *ngIf="activeStunt.completions!.size < activeStunt.maxUses">
     <form [formGroup]="stuntForm" (ngSubmit)="onSubmit()"> 
       <mat-form-field class="select">
         <mat-label class="label">Witness</mat-label>

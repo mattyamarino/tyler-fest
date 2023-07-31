@@ -23,6 +23,6 @@ export class Stunt {
   maxUses!: number;
   points!: number;
   icon!: string;
-  completions?: number
+  completions?: Set<string>;
 }
 
