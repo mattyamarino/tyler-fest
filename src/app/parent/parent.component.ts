@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PerformStunt, Stunt, User } from '../models/models';
+import { Credentials, PerformStunt, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
 import { forkJoin } from 'rxjs';
 
@@ -136,6 +136,7 @@ export class ParentComponent implements OnInit {
   loading = true;
   activeStunt: Stunt | null = null;
   activeUser: User = new User;
+  loggedIn = false;
 
   constructor(private firestoreService: FirestoreService) { }
 
@@ -228,6 +229,10 @@ export class ParentComponent implements OnInit {
     this.stunts.sort((a, b) => a.name.localeCompare(b.name));
     userList.sort((a, b) => { return b.score! - a.score!; });
     return userList;
+  }
+
+  login(creds: Credentials): void {
+    this.loggedIn = true;
   }
 
   toggleStunt(stuntId: string): void {

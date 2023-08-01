@@ -1,0 +1,22 @@
+
+<div class="image">
+
+</div>
+
+<div class="container">
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="login-field">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username">
+    </mat-form-field>
+    <mat-form-field class="login-field">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="button" [disabled]="isDisabled()">
+      <span class="button-label">Submit</span>
+    </button>
+  </form>
+</div>

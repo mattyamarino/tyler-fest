@@ -1,20 +1,29 @@
-<div *ngIf="loading === false">
-  <mat-grid-list cols="3" rowHeight="100vh">
-    <mat-grid-tile colspan="1">
-      <app-scoring-tower [users]="users"></app-scoring-tower>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="2">
-      <div class="stunt-list-container" *ngIf="activeStunt === null">
-        <app-stunt-list (stuntEvent)="toggleStunt($event.id!)" [stunts]="stunts"></app-stunt-list>
-      </div>
-      <div class="stunt-list-container" *ngIf="activeStunt !== null">
-        <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
-        [activeStunt]="activeStunt" 
-        [activeUser]="activeUser"
-        [users]="users"
-        #stuntForm>
-      </app-stunt-form>
-      </div>
-    </mat-grid-tile>
-  </mat-grid-list>
+<div class="background">
+  <div class="container"> 
+    <div *ngIf="loading === false">
+      <mat-grid-list cols="3" rowHeight="100vh">
+        <mat-grid-tile colspan="1">
+          <app-scoring-tower [users]="users"></app-scoring-tower>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2">
+          <div class="stunt-list-container" *ngIf="!loggedIn">
+            <app-login (loginEvent)="login($event)"></app-login>
+          </div>
+          <div *ngIf="loggedIn">
+            <div class="stunt-list-container" *ngIf="activeStunt === null">
+              <app-stunt-list (stuntEvent)="toggleStunt($event.id!)" [stunts]="stunts"></app-stunt-list>
+            </div>
+            <div class="stunt-list-container" *ngIf="activeStunt !== null">
+              <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
+              [activeStunt]="activeStunt" 
+              [activeUser]="activeUser"
+              [users]="users"
+              #stuntForm>
+            </app-stunt-form>
+            </div>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
 </div>
