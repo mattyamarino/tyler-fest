@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Credentials, PerformStunt, Stunt, User } from '../models/models';
+import { PerformStunt, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
 import { forkJoin } from 'rxjs';
 
@@ -136,15 +136,52 @@ export class ParentComponent implements OnInit {
   loading = true;
   activeStunt: Stunt | null = null;
   activeUser: User = new User;
-  loggedIn = false;
+  loggedIn?: boolean;
+  key = 'prod';
 
   constructor(private firestoreService: FirestoreService) { }
 
   ngOnInit(): void {
     // this.onetimeDataUpload();
-
     this.getData();
   }
+
+
+  configureLogin(): void {
+    let auth_cookie = this.getCookie('_auth_cookie');
+
+    if(auth_cookie !== undefined) {
+      this.authenticate(auth_cookie);
+    } else {
+      this.loggedIn = false;
+    }
+  }
+
+  getCookie(cookiename: string) {
+    /* a function to find a cookie based on its name */
+    const res = document.cookie.match('\\b' + cookiename + "=([^;]*)\\b");
+    // document.cookie returns all cookies for this url
+    return res ? res[1] : undefined;
+    // return the regex capture if it has content, otherwise return undefined
+}
+
+  authenticate(credsString: string): void {
+    let creds = credsString.split('~');
+
+    if(creds[1] === this.key) {
+      this.users.forEach(user => {
+        if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase()) {
+          this.loggedIn = true;
+          this.activeUser = user;
+          user.loggedIn = true;
+          document.cookie = '_auth_cookie=' + credsString;
+        }
+      });
+    } else {
+      this.loggedIn = false;
+    }
+  }
+
 
   getData(): void {
     this.firestoreService.getUsers().subscribe(async userRes => {
@@ -174,13 +211,12 @@ export class ParentComponent implements OnInit {
   }
 
   initializeData(unformattedUsers: User[]): void {
-    // TEMP CODE
-    this.activeUser = unformattedUsers[1];
-
     this.initializePerformStunts(unformattedUsers);
     this.transformUsersForScoreboard(unformattedUsers);
 
     this.users = unformattedUsers;
+
+    this.configureLogin();
 
     if(this.activeStunt !== null) {
       this.activeStunt = this.stuntMap.get(this.activeStunt.id!)!
@@ -215,10 +251,6 @@ export class ParentComponent implements OnInit {
         tiedPosition = index;
         user.position = index + 1;
       }
-
-      if (this.activeUser.id === user.id) {
-        user.loggedIn = true;
-      }
     });
 
     return userList
@@ -229,10 +261,6 @@ export class ParentComponent implements OnInit {
     this.stunts.sort((a, b) => a.name.localeCompare(b.name));
     userList.sort((a, b) => { return b.score! - a.score!; });
     return userList;
-  }
-
-  login(creds: Credentials): void {
-    this.loggedIn = true;
   }
 
   toggleStunt(stuntId: string): void {

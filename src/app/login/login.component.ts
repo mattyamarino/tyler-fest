@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Credentials } from '../models/models';
 
 @Component({
   selector: 'app-login',
@@ -15,10 +14,11 @@ export class LoginComponent {
   });
 
   @Output() 
-  loginEvent = new EventEmitter<Credentials>();
+  loginEvent = new EventEmitter<string>();
 
   onSubmit(): void {
-    this.loginEvent.emit();
+    const credsString = this.loginForm.get('username')!.value + '~' + this.loginForm.get('password')!.value;
+    this.loginEvent.emit(credsString);
   }
 
   isDisabled(): boolean {
