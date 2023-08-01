@@ -15,17 +15,8 @@ export class ConfirmationDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  getActionLabel(): string {
+    return this.data.toDelete ? 'Delete' : "Restore";
+  }
 }
-
-
-
-// const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-//   data: {performStunt: this.performStunt},
-// });
-
-// dialogRef.afterClosed().subscribe(result => {
-//   console.log('The dialog was closed');
-//   if(result) {
-//     this.updateUser();
-//   };
-// });  

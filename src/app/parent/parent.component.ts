@@ -155,27 +155,35 @@ export class ParentComponent implements OnInit {
             let stunt = <Stunt>doc.data();
             stunt.id = doc.id;
             stunt.completions = new Set();
+            stunt.deletedCompletions = new Set();
             this.stunts.push(stunt);
             this.stuntMap.set(<string>stunt.id, stunt);
           });
-          this.initializeUsers(unformattedUsers);
+          this.initializeData(unformattedUsers);
         });
       } else {
-        this.initializeUsers(unformattedUsers);
+        this.stunts.forEach(stunt => {
+          stunt.completions = new Set();
+          stunt.deletedCompletions = new Set();
+          this.stuntMap.set(<string>stunt.id, stunt);        
+        });
+        this.initializeData(unformattedUsers);
       }
     });
   }
 
-  initializeUsers(unformattedUsers: User[]): void {
-    if(this.activeUser.id === undefined) {
-      // TEMP CODE
-      this.activeUser = unformattedUsers[1];
-    }
+  initializeData(unformattedUsers: User[]): void {
+    // TEMP CODE
+    this.activeUser = unformattedUsers[1];
 
     this.initializePerformStunts(unformattedUsers);
     this.transformUsersForScoreboard(unformattedUsers);
 
     this.users = unformattedUsers;
+
+    if(this.activeStunt !== null) {
+      this.activeStunt = this.stuntMap.get(this.activeStunt.id!)!
+    }
 
     this.loading = false;
   }
@@ -190,7 +198,11 @@ export class ParentComponent implements OnInit {
       user.performances!.forEach((performance: PerformStunt) => {
         let points = this.stuntMap.get(performance.stuntId)!.points;
 
-        this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
+        if(performance.isDeleted) {
+          this.stuntMap.get(performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
+        } else {
+          this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
+        }
         
         user.score = user.score! + points;
       });
@@ -213,6 +225,7 @@ export class ParentComponent implements OnInit {
 
   transformUsersForScoreboard(userList: User[]): User[] {
     this.stunts = Array.from(this.stuntMap.values());
+    this.stunts.sort((a, b) => a.name.localeCompare(b.name));
     userList.sort((a, b) => { return b.score! - a.score!; });
     return userList;
   }

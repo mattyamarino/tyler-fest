@@ -1,1 +1,17 @@
-<p>confirmation-dialog works!</p>
+
+<div class="container">
+  <h1 mat-dialog-title>Are You Sure You Want To {{ getActionLabel() }} This Attempt?</h1>
+  
+  <div mat-dialog-actions class="buttons">
+    <button mat-button (click)="onNoClick()"  mat-raised-button color="secondary">
+      <span class="button-label">
+        Go Back
+      </span>
+    </button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial  mat-raised-button color="primary">
+      <span class="button-label">
+        {{ getActionLabel() }} Attempt
+      </span>
+    </button>
+  </div>
+</div>

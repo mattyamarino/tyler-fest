@@ -14,6 +14,7 @@ export class PerformStunt {
   stuntId!: string;
   description!: string;
   timestamp!: number;
+  isDeleted?: boolean;
 }
 
 export class Stunt {
@@ -23,6 +24,7 @@ export class Stunt {
   maxUses!: number;
   points!: number;
   icon!: string;
-  completions?: Set<string>;
+  completions?: Set<string>
+  deletedCompletions?: Set<string>
 }
 

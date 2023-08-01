@@ -11,7 +11,8 @@
         <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
         [activeStunt]="activeStunt" 
         [activeUser]="activeUser"
-        [users]="users">
+        [users]="users"
+        #stuntForm>
       </app-stunt-form>
       </div>
     </mat-grid-tile>

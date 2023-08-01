@@ -1,0 +1,13 @@
+.container {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.buttons {
+  justify-content: center;
+}
+
+.button-label {
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+}

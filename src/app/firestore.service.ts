@@ -32,7 +32,6 @@ export class FirestoreService {
       });
   }
 
-
 // ONE TIME FUNCTIONS
   uploadData(users: User[], stunts: Stunt[], performs: PerformStunt[]) {
 
