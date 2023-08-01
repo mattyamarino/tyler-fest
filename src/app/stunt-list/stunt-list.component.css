@@ -2,14 +2,10 @@
 .stunt-card {
   min-width: 70%;
   margin: 25px;
-  background-color: #ff9100;
+  background-color: rgb(255, 145, 0);
   border: 1px solid;
   padding: 10px;
   box-shadow: 4px 8px rgb(79, 78, 78);
 }
-
-/* .container {
-  width: 70vw;
-} */
 
 

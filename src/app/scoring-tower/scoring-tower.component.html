@@ -1,5 +1,12 @@
 
 <div class="container">
+  <div class="image">
+  </div>
+  
+  <button mat-raised-button color="secondary" class="button" (click)="logout()">
+    <span class="button-label">Logout</span>
+  </button>  
+  
   <table mat-table [dataSource]="users" class="mat-elevation-z8 table">
 
     <ng-container matColumnDef="position">

@@ -41,7 +41,7 @@ import { LoginComponent } from './login/login.component';
     StuntFormComponent,
     ConfirmationDialogComponent,
     SnackbarComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

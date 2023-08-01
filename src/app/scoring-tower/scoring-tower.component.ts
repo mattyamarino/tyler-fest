@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from '../models/models';
 
 
@@ -11,12 +11,20 @@ export class ScoringTowerComponent implements OnInit {
 
   @Input()
   users!: User[];
+
+  @Output()
+  logoutEvent = new EventEmitter();
+
   displayedColumns: string[] = ['position', 'name', 'score'];
 
   constructor() { }
 
   ngOnInit(): void {
     
+  }
+
+  logout(): void {
+    this.logoutEvent.emit();
   }
 
 }

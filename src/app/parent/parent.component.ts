@@ -271,4 +271,9 @@ export class ParentComponent implements OnInit {
     this.firestoreService.uploadData(this.hardcodedUsers, this.hardcodedStunts, []);
   }
 
+  logout(): void {
+    document.cookie = '';
+    this.loggedIn = false;
+  }
+
 }

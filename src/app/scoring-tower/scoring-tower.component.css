@@ -25,3 +25,13 @@
 .mat-column-score { 
   font-size: 10px;
 }
+
+.image {
+  background-image: url('../../assets/darklogo.jpg');
+  background-repeat: no-repeat;
+  background-size: 100px;
+  min-height: 100px;
+  padding: 30px;
+  background-position: center;
+  background-color: #444444;
+}

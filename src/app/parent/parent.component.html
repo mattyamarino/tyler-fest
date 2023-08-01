@@ -3,7 +3,7 @@
     <div *ngIf="loading === false">
       <mat-grid-list cols="3" rowHeight="100vh">
         <mat-grid-tile colspan="1">
-          <app-scoring-tower [users]="users"></app-scoring-tower>
+          <app-scoring-tower (logoutEvent)="logout()" [users]="users"></app-scoring-tower>
         </mat-grid-tile>
         <mat-grid-tile colspan="2">
           <div class="stunt-list-container" *ngIf="!loggedIn">
