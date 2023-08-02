@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { PerformStunt, Stunt, User } from './models/models';
+import { PerformStunt, PreviousOrder, Stunt, User } from './models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +32,22 @@ export class FirestoreService {
       });
   }
 
+  updateUserPreviousOrder(id: string, previousOrder: PreviousOrder) {
+    const jsonStr = JSON.stringify(previousOrder);
+
+    return this.firestore.collection('users').doc(id).update({
+      jsonPreviousOrder: jsonStr
+    })
+      .then(() => {
+        console.log("User " + id + " successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+  }
+
 // ONE TIME FUNCTIONS
-  uploadData(users: User[], stunts: Stunt[], performs: PerformStunt[]) {
+  uploadData(users: User[], stunts: Stunt[]) {
 
     users.forEach(user => {
       this.firestore.collection('users')

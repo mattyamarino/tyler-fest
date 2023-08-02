@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PerformStunt, Stunt, User } from '../models/models';
+import { PerformStunt, PreviousOrder, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -171,16 +171,35 @@ export class ParentComponent implements OnInit {
     if(creds[1] === this.key) {
       this.users.forEach(user => {
         if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase()) {
+          user.previousOrder = this.loggedIn ? this.activeUser.previousOrder : this.setPreviousOrder(user);
           this.loggedIn = true;
-          this.activeUser = user;
           user.loggedIn = true;
-          // document.cookie = '_auth_cookie=' + credsString;
+          this.activeUser = user;
           this.cookieService.set('_auth_cookie', credsString);
         }
       });
     } else {
       this.loggedIn = false;
     }
+  }
+
+  setPreviousOrder(user: User): PreviousOrder {
+    let prevOrder = new PreviousOrder();
+
+    let newPrevOrder = {
+      timestamp: Date.now(),
+      userList: this.users
+    };
+
+    if(user.jsonPreviousOrder !== undefined) {
+      prevOrder = JSON.parse(user.jsonPreviousOrder);
+    }
+
+    if(prevOrder.timestamp === undefined || prevOrder!.timestamp > prevOrder!.timestamp + 120000) {
+      this.firestoreService.updateUserPreviousOrder(user.id!, newPrevOrder);
+    }
+
+    return prevOrder;
   }
 
 
@@ -270,7 +289,7 @@ export class ParentComponent implements OnInit {
   }
 
   onetimeDataUpload(): void {
-    this.firestoreService.uploadData(this.hardcodedUsers, this.hardcodedStunts, []);
+    this.firestoreService.uploadData(this.hardcodedUsers, this.hardcodedStunts);
   }
 
   logout(): void {
