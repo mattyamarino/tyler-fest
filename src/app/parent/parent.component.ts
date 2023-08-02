@@ -131,6 +131,8 @@ export class ParentComponent implements OnInit {
 
 
   users: User[] = [];
+  stuntUsers: User[] = [];
+  userMap: Map<string, User> = new Map();
   stunts: Stunt[] = [];
   stuntMap: Map<string, Stunt> = new Map();
   loading = true;
@@ -138,6 +140,7 @@ export class ParentComponent implements OnInit {
   activeUser: User = new User;
   loggedIn?: boolean;
   key = 'prod';
+  loginFail = false;
 
   constructor(private firestoreService: FirestoreService, private cookieService: CookieService) { }
 
@@ -145,44 +148,6 @@ export class ParentComponent implements OnInit {
     // this.onetimeDataUpload();
     this.getData();
   }
-
-
-  configureLogin(): void {
-    let auth_cookie = this.getCookie('_auth_cookie');
-
-    if(auth_cookie !== undefined) {
-      this.authenticate(auth_cookie);
-    } else {
-      this.loggedIn = false;
-    }
-  }
-
-  getCookie(cookiename: string) {
-    /* a function to find a cookie based on its name */
-    const res = document.cookie.match('\\b' + cookiename + "=([^;]*)\\b");
-    // document.cookie returns all cookies for this url
-    return res ? res[1] : undefined;
-    // return the regex capture if it has content, otherwise return undefined
-}
-
-  authenticate(credsString: string): void {
-    let creds = credsString.split('~');
-
-    if(creds[1] === this.key) {
-      this.users.forEach(user => {
-        if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase()) {
-          this.loggedIn = true;
-          this.activeUser = user;
-          user.loggedIn = true;
-          // document.cookie = '_auth_cookie=' + credsString;
-          this.cookieService.set('_auth_cookie', credsString);
-        }
-      });
-    } else {
-      this.loggedIn = false;
-    }
-  }
-
 
   getData(): void {
     this.firestoreService.getUsers().subscribe(async userRes => {
@@ -233,13 +198,9 @@ export class ParentComponent implements OnInit {
 
       user.performances!.forEach((performance: PerformStunt) => {
         let points = this.stuntMap.get(performance.stuntId)!.points;
-
-        if(performance.isDeleted) {
-          this.stuntMap.get(performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
-        } else {
-          this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
-        } 
-        user.score = user.score! + points;
+        if(!performance.isDeleted) {
+          user.score = user.score! + points;
+        }
       });
     });
 
@@ -261,8 +222,62 @@ export class ParentComponent implements OnInit {
         tiedPosition = index;
         user.position = index + 1;
       }
+
+      this.userMap.set(user.id!, user);
     });
     return userList;
+  }
+
+  configureLogin(): void {
+    let auth_cookie = this.getCookie('_auth_cookie');
+
+    if(auth_cookie !== undefined) {
+      this.authenticate(auth_cookie);
+    } else {
+      this.loggedIn = false;
+    }
+  }
+
+  getCookie(cookiename: string) {
+    /* a function to find a cookie based on its name */
+    const res = document.cookie.match('\\b' + cookiename + "=([^;]*)\\b");
+    // document.cookie returns all cookies for this url
+    return res ? res[1] : undefined;
+    // return the regex capture if it has content, otherwise return undefined
+}
+
+  authenticate(credsString: string): void {
+    let creds = credsString.split('~');
+
+    if(creds[1] === this.key) {
+
+      this.stuntUsers = [...this.users];
+
+      this.users.forEach((user: User, index: number) => {
+        if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase()) {
+          this.stuntCompletions(user);
+          this.loggedIn = true;
+          user.loggedIn = true;
+          this.activeUser = user;
+          this.cookieService.set('_auth_cookie', credsString);
+          this.stuntUsers.splice(index,1);
+          this.loginFail = false;
+        }
+      });
+    } else {
+      this.loggedIn = false;
+      this.loginFail = true;
+    }
+  }
+
+  stuntCompletions(user: User): void {
+    user.performances?.forEach(performance => {
+      if(performance.isDeleted) {
+        this.stuntMap.get(performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
+      } else {
+        this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
+      } 
+    });
   }
 
   toggleStunt(stuntId: string): void {
@@ -276,6 +291,8 @@ export class ParentComponent implements OnInit {
   logout(): void {
     this.cookieService.delete('_auth_cookie', '/');
     this.loggedIn = false;
+    this.activeUser = new User();
+    this.getData();
   }
 
 }

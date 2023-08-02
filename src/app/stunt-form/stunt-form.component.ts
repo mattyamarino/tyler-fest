@@ -24,6 +24,9 @@ export class StuntFormComponent implements OnInit{
   @Input()
   users: User[] = [];
 
+  @Input()
+  userMap: Map<string, User> = new Map();
+
   @Output() 
   stuntEvent = new EventEmitter<Stunt>();
 
@@ -33,8 +36,6 @@ export class StuntFormComponent implements OnInit{
   });
 
   bystander = 'Some Rando';
-
-  userMap: Map<string, User> = new Map();
 
   saving = false;
 
@@ -49,10 +50,6 @@ export class StuntFormComponent implements OnInit{
   }
 
   initializeUserNames(): void {
-    this.users.sort((a: User, b: User) => {
-      this.userMap.set(a.id!, a);
-      return (a.firstName < b.firstName) ? -1 : 1}
-      );
     this.users.push({
       abreviation: 'bystander',
       firstName: this.bystander
@@ -103,9 +100,11 @@ export class StuntFormComponent implements OnInit{
         timestamp: Date.now()
       }
 
-      this.pastPerformances.push(performStunt)
+      this.pastPerformances.push(performStunt);
 
-      this.firestoreService.updateUserStunts(this.activeUser.id!, this.pastPerformances!);
+      this.activeUser.performances!.push(performStunt);
+
+      this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
 
       this._snackBar.openFromComponent(SnackbarComponent, {
         horizontalPosition: 'center',
@@ -170,9 +169,9 @@ export class StuntFormComponent implements OnInit{
 
         this.sortPerformanceLists();
 
-        const performancesToSave = this.pastPerformances.concat(this.deletedPerformances);
+        this.activeUser.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
 
-        this.firestoreService.updateUserStunts(this.activeUser.id!, performancesToSave);
+        this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
       };
     });  
   }

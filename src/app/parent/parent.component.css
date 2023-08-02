@@ -3,7 +3,7 @@
   margin: 0 auto;
 }
 
-.stunt-list-container {
+.component-container {
   height: 100vh;
   width: 100%;
   overflow-y: scroll;
