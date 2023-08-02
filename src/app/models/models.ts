@@ -4,6 +4,7 @@ export class User {
   abreviation!: string;
   score?: number = 0;
   position?: number;
+  isTied?: boolean;
   loggedIn?: boolean;
   performances?: PerformStunt[];
   jsonPerforms?: string;

@@ -3,15 +3,20 @@
   <div class="image">
   </div>
   
-  <button mat-raised-button color="secondary" class="button" (click)="logout()">
-    <span class="button-label">Logout</span>
-  </button>  
+  <div class="button-div">
+    <div *ngIf="activeUser.id !== undefined">
+      <button mat-raised-button color="secondary" class="button" (click)="logout()">
+        <mat-icon class="logout-button">exit_to_app</mat-icon>
+        <span class="button-label  logout-button">Logout</span>
+      </button>  
+    </div>
+  </div>
   
   <table mat-table [dataSource]="users" class="mat-elevation-z8 table">
 
     <ng-container matColumnDef="position">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let user"> {{ user.position }} </td>
+      <td mat-cell *matCellDef="let user"> {{ user.isTied ? '' : user.position }} </td>
     </ng-container>
   
     <ng-container matColumnDef="name">

@@ -12,6 +12,9 @@ export class ScoringTowerComponent implements OnInit {
   @Input()
   users!: User[];
 
+  @Input()
+  activeUser!: User;
+
   @Output()
   logoutEvent = new EventEmitter();
 

@@ -35,3 +35,15 @@
   background-position: center;
   background-color: #444444;
 }
+
+.button-div {
+  min-height: 36px;
+  padding-bottom: 17px;
+  justify-content: center;
+  text-align: center;
+  background-color: #444444;
+}
+
+.logout-button {
+  color: #9c9c9c;
+}

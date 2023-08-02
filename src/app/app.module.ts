@@ -21,6 +21,8 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
+import {CookieService} from 'ngx-cookie-service';
+
 import { AppComponent } from './app.component';
 import { ScoringTowerComponent } from './scoring-tower/scoring-tower.component';
 import { ParentComponent } from './parent/parent.component';
@@ -61,7 +63,7 @@ import { LoginComponent } from './login/login.component';
     MatSnackBarModule,
     
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PerformStunt, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
-import { forkJoin } from 'rxjs';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-parent',
@@ -139,7 +139,7 @@ export class ParentComponent implements OnInit {
   loggedIn?: boolean;
   key = 'prod';
 
-  constructor(private firestoreService: FirestoreService) { }
+  constructor(private firestoreService: FirestoreService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     // this.onetimeDataUpload();
@@ -174,7 +174,8 @@ export class ParentComponent implements OnInit {
           this.loggedIn = true;
           this.activeUser = user;
           user.loggedIn = true;
-          document.cookie = '_auth_cookie=' + credsString;
+          // document.cookie = '_auth_cookie=' + credsString;
+          this.cookieService.set('_auth_cookie', credsString);
         }
       });
     } else {
@@ -226,9 +227,7 @@ export class ParentComponent implements OnInit {
   }
 
   initializePerformStunts(userList: User[]): User[] {
-    let tiedPosition = 0;
-
-    userList.forEach((user: User, index: number) => {
+    userList.forEach((user: User) => {
       user.performances = user.jsonPerforms ? JSON.parse(user.jsonPerforms) : [];
       user.score = 0;
 
@@ -239,18 +238,9 @@ export class ParentComponent implements OnInit {
           this.stuntMap.get(performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
         } else {
           this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
-        }
-        
+        } 
         user.score = user.score! + points;
       });
-
-
-      if (userList[index - 1] && userList[index - 1].score === user.score) {
-        user.position = tiedPosition + 1;
-      } else {
-        tiedPosition = index;
-        user.position = index + 1;
-      }
     });
 
     return userList
@@ -259,7 +249,19 @@ export class ParentComponent implements OnInit {
   transformUsersForScoreboard(userList: User[]): User[] {
     this.stunts = Array.from(this.stuntMap.values());
     this.stunts.sort((a, b) => a.name.localeCompare(b.name));
-    userList.sort((a, b) => { return b.score! - a.score!; });
+    userList.sort((a, b) =>  b.score! - a.score! || a.abreviation.localeCompare(b.abreviation));
+
+    let tiedPosition = 0;
+
+    userList.forEach((user: User, index: number) => {
+      if (userList[index - 1] && userList[index - 1].score === user.score) {
+        user.position = tiedPosition + 1;
+        user.isTied = true;
+      } else {
+        tiedPosition = index;
+        user.position = index + 1;
+      }
+    });
     return userList;
   }
 
@@ -272,7 +274,7 @@ export class ParentComponent implements OnInit {
   }
 
   logout(): void {
-    document.cookie = '';
+    this.cookieService.delete('_auth_cookie', '/');
     this.loggedIn = false;
   }
 
