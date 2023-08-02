@@ -9,10 +9,10 @@
           <div class="component-container" *ngIf="!loggedIn">
             <app-login (loginEvent)="authenticate($event)" [loginFail]="loginFail"></app-login>
           </div>
-          <div class="component-container" *ngIf="activeStunt === null && loggedIn">
+          <div class="component-container" *ngIf="activeStunt === null && loggedIn && activeUser.id !== 'admin'">
             <app-stunt-list (stuntEvent)="toggleStunt($event.id!)" [stunts]="stunts"></app-stunt-list>
           </div>
-          <div class="component-container" *ngIf="activeStunt !== null && loggedIn">
+          <div class="component-container" *ngIf="activeStunt !== null && loggedIn && activeUser.id !== 'admin'">
             <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
             [activeStunt]="activeStunt" 
             [activeUser]="activeUser"
@@ -20,6 +20,12 @@
             [userMap]="userMap"
             #stuntForm>
           </app-stunt-form>
+          </div>
+          <div class="component-container" *ngIf="loggedIn && activeUser.id === 'admin'">
+            <app-stunt-history 
+            [users]="users"
+            [userMap]="userMap">
+          </app-stunt-history>
           </div>
         </mat-grid-tile>
       </mat-grid-list>

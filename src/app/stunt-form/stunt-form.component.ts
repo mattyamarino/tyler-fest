@@ -50,6 +50,7 @@ export class StuntFormComponent implements OnInit{
   }
 
   initializeUserNames(): void {
+    this.users.sort((a, b) => a.firstName.localeCompare(b.firstName));
     this.users.push({
       abreviation: 'bystander',
       firstName: this.bystander

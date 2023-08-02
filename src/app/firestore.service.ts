@@ -33,7 +33,7 @@ export class FirestoreService {
   }
 
 // ONE TIME FUNCTIONS
-  uploadData(users: User[], stunts: Stunt[], performs: PerformStunt[]) {
+  uploadData(users: User[], stunts: Stunt[]) {
 
     users.forEach(user => {
       this.firestore.collection('users')

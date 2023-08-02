@@ -31,6 +31,7 @@ import { StuntFormComponent } from './stunt-form/stunt-form.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { LoginComponent } from './login/login.component';
+import { StuntHistoryComponent } from './stunt-history/stunt-history.component';
 
 
 
@@ -44,6 +45,7 @@ import { LoginComponent } from './login/login.component';
     ConfirmationDialogComponent,
     SnackbarComponent,
     LoginComponent,
+    StuntHistoryComponent,
   ],
   imports: [
     BrowserModule,
