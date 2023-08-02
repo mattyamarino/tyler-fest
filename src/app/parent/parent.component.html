@@ -3,7 +3,9 @@
     <div *ngIf="loading === false">
       <mat-grid-list cols="3" rowHeight="100vh">
         <mat-grid-tile colspan="1">
-          <app-scoring-tower (logoutEvent)="logout()" [users]="users" [activeUser]="activeUser"></app-scoring-tower>
+          <div class="scoring-tower">
+            <app-scoring-tower (logoutEvent)="logout()" [users]="users" [activeUser]="activeUser"></app-scoring-tower>
+          </div>
         </mat-grid-tile>
         <mat-grid-tile colspan="2">
           <div class="component-container" *ngIf="!loggedIn">
