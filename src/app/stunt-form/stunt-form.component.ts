@@ -138,42 +138,44 @@ export class StuntFormComponent implements OnInit{
   }
 
   deletePerformStunt(performance: PerformStunt, toDelete: boolean) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        performStunt: performance,
-        toDelete: toDelete
-      },
-    });
-
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        console.log('RESULT: ', result);
-
-        if(toDelete) {
-          this.pastPerformances.forEach((performStunt: PerformStunt, index: number) => {
-            if(performStunt.timestamp === performance.timestamp ) {
-              performStunt.isDeleted = true;
-              this.pastPerformances.splice(index, 1);
-              this.deletedPerformances.push(performStunt);
-            }
-          });
-        } else {
-          this.deletedPerformances.forEach((performStunt: PerformStunt, index: number)  => {
-            if(performStunt.timestamp === performance.timestamp) {
-              performStunt.isDeleted = false;
-              this.deletedPerformances.splice(index, 1);
-              this.pastPerformances.push(performStunt);
-            }
-          });
-        }
-
-        this.sortPerformanceLists();
-
-        this.activeUser.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
-
-        this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
-      };
-    });  
+    if(toDelete || this.pastPerformances.length < this.activeStunt.maxUses) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          performStunt: performance,
+          toDelete: toDelete
+        },
+      });
+  
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          console.log('RESULT: ', result);
+  
+          if(toDelete) {
+            this.pastPerformances.forEach((performStunt: PerformStunt, index: number) => {
+              if(performStunt.timestamp === performance.timestamp ) {
+                performStunt.isDeleted = true;
+                this.pastPerformances.splice(index, 1);
+                this.deletedPerformances.push(performStunt);
+              }
+            });
+          } else {
+            this.deletedPerformances.forEach((performStunt: PerformStunt, index: number)  => {
+              if(performStunt.timestamp === performance.timestamp) {
+                performStunt.isDeleted = false;
+                this.deletedPerformances.splice(index, 1);
+                this.pastPerformances.push(performStunt);
+              }
+            });
+          }
+  
+          this.sortPerformanceLists();
+  
+          this.activeUser.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
+  
+          this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
+        };
+      });  
+    }
   }
 }
