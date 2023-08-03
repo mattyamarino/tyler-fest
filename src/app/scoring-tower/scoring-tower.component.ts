@@ -31,7 +31,7 @@ export class ScoringTowerComponent implements OnInit {
   }
 
   getChange(user: User): number {
-    if(this.activeUser === undefined || this.activeUser.previousOrder!.userOrder === undefined || this.activeUser.previousOrder!.userOrder!.get(user.id!) === user.position) {
+    if(this.activeUser === undefined || this.activeUser.previousOrder === undefined || this.activeUser.previousOrder!.userOrder === undefined || this.activeUser.previousOrder!.userOrder!.get(user.id!) === user.position) {
       return 0;
     }
 
