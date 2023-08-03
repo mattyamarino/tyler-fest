@@ -1,8 +1,10 @@
 <div class="container">
 
-  <div>
+  <div class="button-container">
     <button mat-raised-button color="primary" class="button" (click)="toggleEventSuspension()">
-      <span class="button-label">Suspend Event</span>
+      <span class="button-label">
+        {{ isSuspended ? 'Reactivate Event' : 'Suspend Event' }}
+      </span>
     </button>
   </div>
 
@@ -34,11 +36,11 @@
             </div>
           </div>
 
-          <div *ngIf="!performStunt.isDeleted" (click)="deletePerformStunt(user.id!, performStunt, true)" class="action-icon">
+          <div *ngIf="!performStunt.isDeleted && !user.isSuspended" (click)="deletePerformStunt(user.id!, performStunt, true)" class="action-icon">
             <mat-icon>delete</mat-icon>
           </div>
     
-          <div *ngIf="performStunt.isDeleted" (click)="deletePerformStunt(user.id!, performStunt, false)" class="action-icon">
+          <div *ngIf="performStunt.isDeleted && !user.isSuspended" (click)="deletePerformStunt(user.id!, performStunt, false)" class="action-icon">
             <mat-icon>settings_backup_restore</mat-icon>
           </div>
 

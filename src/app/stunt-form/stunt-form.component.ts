@@ -142,8 +142,9 @@ export class StuntFormComponent implements OnInit{
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           performStunt: performance,
-          toDelete: toDelete
-        },
+          toDelete: toDelete,
+          isTogglePerformStunt: true
+        }
       });
   
   

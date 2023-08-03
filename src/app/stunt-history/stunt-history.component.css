@@ -10,6 +10,10 @@
   box-shadow: 4px 8px rgb(79, 78, 78);
 }
 
+.button-container {
+  text-align: center;
+}
+
 .button-label {
   font-size: 11px;
   font-weight: 700;
@@ -18,7 +22,7 @@
 }
 
 .button {
-  width: 100%;
+  width: 80%;
   margin-top: 17px;
   margin-bottom: 17px;
 }
@@ -34,12 +38,14 @@
 }
 
 .username {
+  border-top: 2px solid black;
   font-family: 'lemon_bold', 'arial', sans-serif;
   font-weight: 600;
   font-size: 13px;
   text-align: center;
   margin-bottom: 10px;
   margin-top: 17px;
+  padding-top: 10px;
 }
 
 .stunt-name {

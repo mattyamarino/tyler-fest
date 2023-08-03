@@ -17,9 +17,13 @@ export class StuntHistoryComponent implements OnInit{
   @Input()
   userMap: Map<string, User> = new Map();
 
+  isSuspended!: boolean;
+
   constructor(public dialog: MatDialog, private firestoreService: FirestoreService) {}
 
   ngOnInit() {
+    this.isSuspended = this.users[0].isSuspended !== undefined ? this.users[0].isSuspended : false;
+
     this.initializeData();
   }
 
@@ -31,19 +35,58 @@ export class StuntHistoryComponent implements OnInit{
   }
 
   toggleEventSuspension() {
-    const isSuspended = this.users[0].isSuspended !== undefined ? !this.users[0].isSuspended : true;
 
-    this.users.forEach(user => this.firestoreService.updateUserSuspension(user.id!, isSuspended));
+    const dialogRef1 = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        isToggleSuspension: true,
+        isSuspended: !this.isSuspended,
+        suspensionActivationCounter: 1
+      }
+    });
 
-    let x = 0;
+    dialogRef1.afterClosed().subscribe(async result1 => {
+      if(result1 && this.isSuspended) {
+        
+        this.toggleUserSuspension();
+
+      } else if (result1) {
+
+        await new Promise(f => setTimeout(f, 600));
+
+        const dialogRef2 = this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            isToggleSuspension: true,
+            isSuspended: true,
+            suspensionActivationCounter: 2
+          }
+        });
+
+        dialogRef2.afterClosed().subscribe(result2 => {
+          if(result2) {
+
+            this.toggleUserSuspension();
+          
+          };
+        });  
+
+      }
+    });  
+
+
+  }
+
+  toggleUserSuspension(): void {
+    this.users.forEach(user => this.firestoreService.updateUserSuspension(user.id!, !this.isSuspended));
+    this.isSuspended = !this.isSuspended
   }
 
   deletePerformStunt(userId: string, performance: PerformStunt, toDelete: boolean) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         performStunt: performance,
-        toDelete: toDelete
-      },
+        toDelete: toDelete,
+        isTogglePerformStunt: true
+      }
     });
 
 

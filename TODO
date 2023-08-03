@@ -1,9 +1,9 @@
 ********** TODO **********
-add margin to snackbar
-add error handling for firestore requests
-disable restore perform stunt icon if unable to perform action
-add admin button to suspend new entries/deletes/restores
+disable restore button in admin page if stunt at max uses
 add scoring position update
+update snackbar styling (margin, color)
+add specific snackbar messages?
+add error handling for firestore requests
 
 
 ********** DONE **********
@@ -18,3 +18,5 @@ add cookie
 implement admin screen
 allow login without cookie
 depricate stuntMap replace with .find()
+disable restore perform stunt icon if unable to perform action
+add admin button to suspend new entries/deletes/restores
