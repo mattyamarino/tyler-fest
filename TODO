@@ -1,0 +1,21 @@
+********** TODO **********
+add margin to snackbar
+add error handling for firestore requests
+disable restore perform stunt icon if unable to perform action
+add admin button to suspend new entries/deletes/restores
+add scoring position update
+make stuntMap a field on user object
+
+
+
+********** DONE **********
+implement score tower
+higlight active user
+add stunt list with completion data
+implement stunt form with new data input and history
+upgrade user request to value changes
+fix issue where multiple performstunt stunts dont save
+fix multi session problem
+add cookie
+implement admin screen
+allow login without cookie

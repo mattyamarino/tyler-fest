@@ -22,6 +22,7 @@ export class ParentComponent implements OnInit {
   key = 'prod';
   adminKey = 'gamemaster';
   loginFail = false;
+  storedCreds?: string;
 
   constructor(private firestoreService: FirestoreService, private cookieService: CookieService) { }
 
@@ -110,10 +111,10 @@ export class ParentComponent implements OnInit {
   }
 
   configureLogin(): void {
-    let auth_cookie = this.getCookie('_auth_cookie');
+    let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
 
-    if(auth_cookie !== undefined) {
-      this.authenticate(auth_cookie);
+    if(creds !== undefined) {
+      this.authenticate(creds!);
     } else {
       this.loggedIn = false;
     }
@@ -135,6 +136,7 @@ export class ParentComponent implements OnInit {
       this.loginFail = false;
       this.activeUser.id = 'admin';
       this.cookieService.set('_auth_cookie', credsString);
+      this.storedCreds = credsString;
 
     } else if(creds[1].trim() === this.key) {
 
@@ -147,6 +149,7 @@ export class ParentComponent implements OnInit {
           user.loggedIn = true;
           this.activeUser = user;
           this.cookieService.set('_auth_cookie', credsString);
+          this.storedCreds = credsString;
           this.stuntUsers.splice(index,1);
           this.loginFail = false;
         }
@@ -178,6 +181,7 @@ export class ParentComponent implements OnInit {
 
   logout(): void {
     this.cookieService.delete('_auth_cookie', '/');
+    this.storedCreds = undefined;
     this.loggedIn = false;
     this.activeUser = new User();
     this.getData();
