@@ -14,7 +14,6 @@ export class ParentComponent implements OnInit {
   stuntUsers: User[] = [];
   userMap: Map<string, User> = new Map();
   stunts: Stunt[] = [];
-  stuntMap: Map<string, Stunt> = new Map();
   loading = true;
   activeStunt: Stunt | null = null;
   activeUser: User = new User;
@@ -42,7 +41,6 @@ export class ParentComponent implements OnInit {
             stunt.completions = new Set();
             stunt.deletedCompletions = new Set();
             this.stunts.push(stunt);
-            this.stuntMap.set(<string>stunt.id, stunt);
           });
           this.initializeData(unformattedUsers);
         });
@@ -50,7 +48,6 @@ export class ParentComponent implements OnInit {
         this.stunts.forEach(stunt => {
           stunt.completions = new Set();
           stunt.deletedCompletions = new Set();
-          this.stuntMap.set(<string>stunt.id, stunt);        
         });
         this.initializeData(unformattedUsers);
       }
@@ -66,7 +63,7 @@ export class ParentComponent implements OnInit {
     this.configureLogin();
 
     if(this.activeStunt !== null) {
-      this.activeStunt = this.stuntMap.get(this.activeStunt.id!)!
+      this.activeStunt = this.stunts.find(stunt => stunt.id === this.activeStunt!.id!)!
     }
 
     this.loading = false;
@@ -78,8 +75,8 @@ export class ParentComponent implements OnInit {
       user.score = 0;
 
       user.performances!.forEach((performance: PerformStunt) => {
-        let points = this.stuntMap.get(performance.stuntId)!.points;
-        performance.stuntName = this.stuntMap.get(performance.stuntId)!.name;
+        let points = this.stunts.find(stunt => stunt.id === performance.stuntId)!.points;
+        performance.stuntName = this.stunts.find(stunt => stunt.id === performance.stuntId)!.name;
         if(!performance.isDeleted) {
           user.score = user.score! + points;
         }
@@ -90,7 +87,6 @@ export class ParentComponent implements OnInit {
   }
 
   transformUsersForScoreboard(userList: User[]): User[] {
-    this.stunts = Array.from(this.stuntMap.values());
     this.stunts.sort((a, b) => a.name.localeCompare(b.name));
     userList.sort((a, b) =>  b.score! - a.score! || a.abreviation.localeCompare(b.abreviation));
 
@@ -168,15 +164,15 @@ export class ParentComponent implements OnInit {
   stuntCompletions(user: User): void {
     user.performances?.forEach(performance => {
       if(performance.isDeleted) {
-        this.stuntMap.get(performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
+        this.stunts.find(stunt => stunt.id === performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
       } else {
-        this.stuntMap.get(performance.stuntId)!.completions!.add(JSON.stringify(performance));
+        this.stunts.find(stunt => stunt.id === performance.stuntId)!.completions!.add(JSON.stringify(performance));
       } 
     });
   }
 
   toggleStunt(stuntId: string): void {
-    this.activeStunt = this.activeStunt === null ? this.stuntMap.get(stuntId)! : null;
+    this.activeStunt = this.activeStunt === null ? this.stunts.find(stunt => stunt.id === stuntId)! : null;
   }
 
   logout(): void {

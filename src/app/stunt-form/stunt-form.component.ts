@@ -96,7 +96,7 @@ export class StuntFormComponent implements OnInit{
 
       const performStunt = {
         witnessId: this.getUserId(this.stuntForm.get('witness')!.value!)!,
-        description: this.stuntForm.get('description')!.value!,
+        description: this.stuntForm.get('description')!.value!.trim(),
         stuntId: this.activeStunt.id!,
         timestamp: Date.now()
       }

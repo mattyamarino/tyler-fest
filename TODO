@@ -4,8 +4,6 @@ add error handling for firestore requests
 disable restore perform stunt icon if unable to perform action
 add admin button to suspend new entries/deletes/restores
 add scoring position update
-make stuntMap a field on user object
-
 
 
 ********** DONE **********
@@ -19,3 +17,4 @@ fix multi session problem
 add cookie
 implement admin screen
 allow login without cookie
+depricate stuntMap replace with .find()
