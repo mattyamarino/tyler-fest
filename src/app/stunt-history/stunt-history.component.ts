@@ -30,6 +30,14 @@ export class StuntHistoryComponent implements OnInit{
     });
   }
 
+  toggleEventSuspension() {
+    const isSuspended = this.users[0].isSuspended !== undefined ? !this.users[0].isSuspended : true;
+
+    this.users.forEach(user => this.firestoreService.updateUserSuspension(user.id!, isSuspended));
+
+    let x = 0;
+  }
+
   deletePerformStunt(userId: string, performance: PerformStunt, toDelete: boolean) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {

@@ -8,6 +8,7 @@ export class User {
   loggedIn?: boolean;
   performances?: PerformStunt[];
   jsonPerforms?: string;
+  isSuspended?: boolean;
 }
 
 export class PerformStunt {

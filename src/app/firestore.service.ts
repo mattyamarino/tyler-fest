@@ -32,6 +32,18 @@ export class FirestoreService {
       });
   }
 
+  updateUserSuspension(id: string, isSuspended: boolean) {
+    return this.firestore.collection('users').doc(id).update({
+      isSuspended: isSuspended
+    })
+      .then(() => {
+        console.log("User " + id + " successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+  }
+
 // ONE TIME FUNCTIONS
   uploadData(users: User[], stunts: Stunt[]) {
 

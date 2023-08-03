@@ -39,7 +39,7 @@
     {{ activeStunt.rules }}
   </div>
 
-  <div *ngIf="pastPerformances.length < activeStunt.maxUses">
+  <div *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses">
     <form [formGroup]="stuntForm" (ngSubmit)="onSubmit()">
       <mat-form-field class="select">
         <mat-label class="label">Witness</mat-label>
@@ -77,7 +77,7 @@
       </div>
 
 
-      <div (click)="deletePerformStunt(performance, true)" class="action-icon">
+      <div (click)="deletePerformStunt(performance, true)" class="action-icon" *ngIf="!activeUser.isSuspended">
         <mat-icon>delete</mat-icon>
       </div>
 
@@ -100,7 +100,7 @@
       </div>
 
 
-      <div (click)="deletePerformStunt(deletedPerformance, false)" class="action-icon">
+      <div (click)="deletePerformStunt(deletedPerformance, false)" class="action-icon" *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses">
         <mat-icon>settings_backup_restore</mat-icon>
       </div>
 
