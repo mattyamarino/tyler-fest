@@ -8,30 +8,10 @@
   border: 1px solid;
   padding: 10px;
   box-shadow: 4px 8px rgb(79, 78, 78);
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
 
-.rules {
-  padding-top: 17px;
-  padding-bottom: 17px;
+.button-container {
   text-align: center;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.points {
-  padding-top: 17px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.select {
-  max-width: 100%;
-}
-
-.label {
-  font-size: 11px;
 }
 
 .button-label {
@@ -42,8 +22,39 @@
 }
 
 .button {
-  width: 100%;
+  width: 80%;
+  margin-top: 17px;
   margin-bottom: 17px;
+}
+
+
+.title {
+  font-family: 'lemon_bold', 'arial', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  text-align: center;
+  margin-top: 17px;
+  margin-bottom: 17px;
+}
+
+.username {
+  border-top: 2px solid black;
+  font-family: 'lemon_bold', 'arial', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 17px;
+  padding-top: 10px;
+}
+
+.stunt-name {
+  font-weight: 600;
+}
+
+.data {
+  font-size: 11px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
 
 .past-performances {
@@ -80,4 +91,3 @@
   text-align: center;
   align-self: center;
 }
-

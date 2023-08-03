@@ -10,6 +10,7 @@ export class User {
   jsonPerforms?: string;
   previousOrder?: PreviousOrder;
   jsonPreviousOrder?: string;
+  isSuspended?: boolean;
 }
 
 export class PerformStunt {
@@ -18,6 +19,7 @@ export class PerformStunt {
   description!: string;
   timestamp!: number;
   isDeleted?: boolean;
+  stuntName?: string;
 }
 
 export class Stunt {

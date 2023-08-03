@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -13,12 +13,21 @@ export class LoginComponent {
     password: new FormControl('')
   });
 
+  @Input()
+  loginFail = false;
+
   @Output() 
   loginEvent = new EventEmitter<string>();
 
+  submitting = false;
+
   onSubmit(): void {
-    const credsString = this.loginForm.get('username')!.value + '~' + this.loginForm.get('password')!.value;
-    this.loginEvent.emit(credsString);
+    if(!this.submitting) {
+      this.submitting = true;
+      const credsString = this.loginForm.get('username')!.value + '~' + this.loginForm.get('password')!.value;
+      this.loginEvent.emit(credsString);
+      this.submitting = false;
+    }
   }
 
   isDisabled(): boolean {

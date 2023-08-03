@@ -24,6 +24,9 @@ export class StuntFormComponent implements OnInit{
   @Input()
   users: User[] = [];
 
+  @Input()
+  userMap: Map<string, User> = new Map();
+
   @Output() 
   stuntEvent = new EventEmitter<Stunt>();
 
@@ -33,8 +36,6 @@ export class StuntFormComponent implements OnInit{
   });
 
   bystander = 'Some Rando';
-
-  userMap: Map<string, User> = new Map();
 
   saving = false;
 
@@ -49,10 +50,7 @@ export class StuntFormComponent implements OnInit{
   }
 
   initializeUserNames(): void {
-    this.users.sort((a: User, b: User) => {
-      this.userMap.set(a.id!, a);
-      return (a.firstName < b.firstName) ? -1 : 1}
-      );
+    this.users.sort((a, b) => a.firstName.localeCompare(b.firstName));
     this.users.push({
       abreviation: 'bystander',
       firstName: this.bystander
@@ -98,14 +96,16 @@ export class StuntFormComponent implements OnInit{
 
       const performStunt = {
         witnessId: this.getUserId(this.stuntForm.get('witness')!.value!)!,
-        description: this.stuntForm.get('description')!.value!,
+        description: this.stuntForm.get('description')!.value!.trim(),
         stuntId: this.activeStunt.id!,
         timestamp: Date.now()
       }
 
-      this.pastPerformances.push(performStunt)
+      this.pastPerformances.push(performStunt);
 
-      this.firestoreService.updateUserStunts(this.activeUser.id!, this.pastPerformances!);
+      this.activeUser.performances!.push(performStunt);
+
+      this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
 
       this._snackBar.openFromComponent(SnackbarComponent, {
         horizontalPosition: 'center',
@@ -138,42 +138,45 @@ export class StuntFormComponent implements OnInit{
   }
 
   deletePerformStunt(performance: PerformStunt, toDelete: boolean) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        performStunt: performance,
-        toDelete: toDelete
-      },
-    });
-
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        console.log('RESULT: ', result);
-
-        if(toDelete) {
-          this.pastPerformances.forEach((performStunt: PerformStunt, index: number) => {
-            if(performStunt.timestamp === performance.timestamp ) {
-              performStunt.isDeleted = true;
-              this.pastPerformances.splice(index, 1);
-              this.deletedPerformances.push(performStunt);
-            }
-          });
-        } else {
-          this.deletedPerformances.forEach((performStunt: PerformStunt, index: number)  => {
-            if(performStunt.timestamp === performance.timestamp) {
-              performStunt.isDeleted = false;
-              this.deletedPerformances.splice(index, 1);
-              this.pastPerformances.push(performStunt);
-            }
-          });
+    if(toDelete || this.pastPerformances.length < this.activeStunt.maxUses) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          performStunt: performance,
+          toDelete: toDelete,
+          isTogglePerformStunt: true
         }
-
-        this.sortPerformanceLists();
-
-        const performancesToSave = this.pastPerformances.concat(this.deletedPerformances);
-
-        this.firestoreService.updateUserStunts(this.activeUser.id!, performancesToSave);
-      };
-    });  
+      });
+  
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          console.log('RESULT: ', result);
+  
+          if(toDelete) {
+            this.pastPerformances.forEach((performStunt: PerformStunt, index: number) => {
+              if(performStunt.timestamp === performance.timestamp ) {
+                performStunt.isDeleted = true;
+                this.pastPerformances.splice(index, 1);
+                this.deletedPerformances.push(performStunt);
+              }
+            });
+          } else {
+            this.deletedPerformances.forEach((performStunt: PerformStunt, index: number)  => {
+              if(performStunt.timestamp === performance.timestamp) {
+                performStunt.isDeleted = false;
+                this.deletedPerformances.splice(index, 1);
+                this.pastPerformances.push(performStunt);
+              }
+            });
+          }
+  
+          this.sortPerformanceLists();
+  
+          this.activeUser.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
+  
+          this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
+        };
+      });  
+    }
   }
 }

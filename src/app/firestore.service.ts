@@ -38,6 +38,17 @@ export class FirestoreService {
     return this.firestore.collection('users').doc(id).update({
       jsonPreviousOrder: jsonStr
     })
+    .then(() => {
+      console.log("User " + id + " successfully updated!");
+    })
+    .catch((error) => {
+      console.error("Error updating document: ", error);
+    });
+}
+  updateUserSuspension(id: string, isSuspended: boolean) {
+    return this.firestore.collection('users').doc(id).update({
+      isSuspended: isSuspended
+    })
       .then(() => {
         console.log("User " + id + " successfully updated!");
       })

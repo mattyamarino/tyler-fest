@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: rgb(79, 78, 78);
+  background-color: #424242;
   color: white;
 }
 
@@ -42,7 +42,7 @@
   min-height: 100px;
   padding: 30px;
   background-position: center;
-  background-color: #444444;
+  background-color: #424242;
 }
 
 .button-div {
@@ -50,7 +50,7 @@
   padding-bottom: 17px;
   justify-content: center;
   text-align: center;
-  background-color: #444444;
+  background-color: #424242;
 }
 
 .logout-button {
