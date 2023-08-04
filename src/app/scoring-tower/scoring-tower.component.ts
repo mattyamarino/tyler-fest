@@ -31,11 +31,19 @@ export class ScoringTowerComponent implements OnInit {
   }
 
   getChange(user: User): number {
-    if(this.activeUser === undefined || this.activeUser.previousOrder === undefined || this.activeUser.previousOrder!.userOrder === undefined || this.activeUser.previousOrder!.userOrder!.get(user.id!) === user.position) {
+    let prevPos = 0;
+
+    if(this.activeUser !== undefined && this.activeUser.previousOrder !== undefined && this.activeUser.previousOrder!.userList !== undefined) {
+      prevPos = this.activeUser!.previousOrder!.userList!.find(u => u.id === user.id)!.position!
+    } 
+
+    if(user.position === prevPos || prevPos === 0) {
       return 0;
     }
 
-    return this.activeUser.previousOrder!.userOrder!.get(user.id!)?.position! > user.position! ? 1 : -1;
+    let ret = prevPos < user.position! ? 1 : -1;
+
+    return ret;
   }
 
 }

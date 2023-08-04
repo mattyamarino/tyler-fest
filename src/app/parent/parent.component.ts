@@ -107,7 +107,7 @@ export class ParentComponent implements OnInit {
         this.previousOrder.userList = [];
       }
 
-      this.previousOrder.userList!.push({firstName: user.firstName, abreviation: user.abreviation, position: user.position});
+      this.previousOrder.userList!.push({id:user.id, firstName: user.firstName, abreviation: user.abreviation, position: user.position});
       this.userMap.set(user.id!, user);
     });
     return userList;
@@ -173,7 +173,7 @@ export class ParentComponent implements OnInit {
       prevOrder = JSON.parse(user.jsonPreviousOrder);
     }
 
-    if(prevOrder.timestamp === undefined || prevOrder!.timestamp > prevOrder!.timestamp + 300000) {
+    if(prevOrder.timestamp === undefined || prevOrder!.timestamp > prevOrder!.timestamp + 600000) {
       this.firestoreService.updateUserPreviousOrder(user.id!, this.previousOrder);
     }
 

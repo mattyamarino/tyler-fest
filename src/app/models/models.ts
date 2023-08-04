@@ -36,6 +36,5 @@ export class Stunt {
 
 export class PreviousOrder {
   timestamp!: number;
-  userOrder?: Map<string, User>;
   userList?: User[];
 }
