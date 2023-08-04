@@ -5,6 +5,17 @@ update snackbar styling (margin, color)
 add specific snackbar messages?
 add error handling for firestore requests
 
+switch darksun logo to be high res copy
+remove rando from witness list
+add spectator view?
+
+add mystery stunt, that can only be completed after gamemaster marks as active
+
+variable stunt scoring
+also option where each performStunt completion is a different points value
+
+gambling - top 3 get points, based on position
+
 
 ********** DONE **********
 implement score tower

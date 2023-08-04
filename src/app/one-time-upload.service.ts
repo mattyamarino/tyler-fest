@@ -35,32 +35,42 @@ export class OneTimeUploadService {
 
   hardcodedUser5: User = {
     firstName: 'Craig',
-    abreviation: 'CRG',
+    abreviation: 'KEG',
   }
 
   hardcodedUser6: User = {
     firstName: 'Carter',
-    abreviation: 'CAR',
+    abreviation: 'C3',
   }
 
   hardcodedUser7: User = {
-    firstName: 'Travis',
-    abreviation: 'TRV',
+    firstName: 'Jones',
+    abreviation: 'TJO',
   }
 
   hardcodedUser8: User = {
-    firstName: 'Rian',
-    abreviation: 'RIN',
+    firstName: 'Ryne',
+    abreviation: 'RYN',
   }
 
   hardcodedUser9: User = {
     firstName: 'Sameer',
-    abreviation: 'SAM',
+    abreviation: 'SMR',
   }
 
   hardcodedUser10: User = {
-    firstName: 'Collin',
+    firstName: 'Colin',
     abreviation: 'COL',
+  }
+
+  hardcodedUser11: User = {
+    firstName: 'Mouser',
+    abreviation: 'MSR',
+  }
+  
+  hardcodedUser12: User = {
+    firstName: 'Allan',
+    abreviation: 'ALN',
   }
 
   hardcodedStunt1 = {
@@ -96,11 +106,11 @@ export class OneTimeUploadService {
   }
 
   hardcodedStunt5 = {
-    name: 'Suicide Karokee',
-    rules: 'pick someone to choose a song for you to sing',
+    name: 'Spin The Wheel',
+    rules: 'get points if you succeed at the task randomly chosen',
     maxUses: 1,
     points: 2,
-    icon: 'singsong'
+    icon: 'spinner'
   }
 
   hardcodedStunt6 = {
@@ -127,7 +137,7 @@ export class OneTimeUploadService {
     icon: 'paper-cup'
   }
 
-  hardcodedUsers = [this.hardcodedUser1, this.hardcodedUser2, this.hardcodedUser3, this.hardcodedUser4, this.hardcodedUser5, this.hardcodedUser6, this.hardcodedUser7, this.hardcodedUser8, this.hardcodedUser9, this.hardcodedUser10];
+  hardcodedUsers = [this.hardcodedUser1, this.hardcodedUser2, this.hardcodedUser3, this.hardcodedUser4, this.hardcodedUser5, this.hardcodedUser6, this.hardcodedUser7, this.hardcodedUser8, this.hardcodedUser9, this.hardcodedUser10, this.hardcodedUser11, this.hardcodedUser12];
 
   hardcodedStunts = [this.hardcodedStunt1, this.hardcodedStunt2, this.hardcodedStunt3, this.hardcodedStunt4, this.hardcodedStunt5, this.hardcodedStunt6, this.hardcodedStunt7, this.hardcodedStunt8];
 
