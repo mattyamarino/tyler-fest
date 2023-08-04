@@ -18,7 +18,7 @@ export class ScoringTowerComponent implements OnInit {
   @Output()
   logoutEvent = new EventEmitter();
 
-  displayedColumns: string[] = ['position', 'name', 'score'];
+  displayedColumns: string[] = ['position', 'name', 'score', 'change'];
 
   constructor() { }
 
@@ -28,6 +28,22 @@ export class ScoringTowerComponent implements OnInit {
 
   logout(): void {
     this.logoutEvent.emit();
+  }
+
+  getChange(user: User): number {
+    let prevPos = 0;
+
+    if(this.activeUser !== undefined && this.activeUser.previousOrder !== undefined && this.activeUser.previousOrder!.userList !== undefined) {
+      prevPos = this.activeUser!.previousOrder!.userList!.find(u => u.id === user.id)!.position!
+    } 
+
+    if(user.position === prevPos || prevPos === 0) {
+      return 0;
+    }
+
+    let ret = prevPos < user.position! ? 1 : -1;
+
+    return ret;
   }
 
 }

@@ -8,6 +8,8 @@ export class User {
   loggedIn?: boolean;
   performances?: PerformStunt[];
   jsonPerforms?: string;
+  previousOrder?: PreviousOrder;
+  jsonPreviousOrder?: string;
   isSuspended?: boolean;
 }
 
@@ -31,3 +33,8 @@ export class Stunt {
   deletedCompletions?: Set<string>
 }
 
+
+export class PreviousOrder {
+  timestamp!: number;
+  userList?: User[];
+}

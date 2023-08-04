@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PerformStunt, Stunt, User } from '../models/models';
+import { PerformStunt, PreviousOrder, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -11,7 +11,7 @@ import {CookieService} from 'ngx-cookie-service';
 export class ParentComponent implements OnInit {
 
   users: User[] = [];
-  stuntUsers: User[] = [];
+  previousOrder: PreviousOrder = new PreviousOrder();
   userMap: Map<string, User> = new Map();
   stunts: Stunt[] = [];
   loading = true;
@@ -55,6 +55,7 @@ export class ParentComponent implements OnInit {
   }
 
   initializeData(unformattedUsers: User[]): void {
+    this.previousOrder = new PreviousOrder();
     this.initializePerformStunts(unformattedUsers);
     this.transformUsersForScoreboard(unformattedUsers);
 
@@ -92,7 +93,7 @@ export class ParentComponent implements OnInit {
 
     let tiedPosition = 0;
 
-    userList.forEach((user: User, index: number) => {
+    userList.forEach((user: User, index: number) => {      
       if (userList[index - 1] && userList[index - 1].score === user.score) {
         user.position = tiedPosition + 1;
         user.isTied = true;
@@ -101,6 +102,12 @@ export class ParentComponent implements OnInit {
         user.position = index + 1;
       }
 
+      if(this.previousOrder.timestamp === undefined) {
+        this.previousOrder.timestamp = Date.now();
+        this.previousOrder.userList = [];
+      }
+
+      this.previousOrder.userList!.push({id:user.id, firstName: user.firstName, abreviation: user.abreviation, position: user.position});
       this.userMap.set(user.id!, user);
     });
     return userList;
@@ -136,17 +143,15 @@ export class ParentComponent implements OnInit {
 
     } else if(creds[1].trim() === this.key) {
 
-      this.stuntUsers = [...this.users];
-
       this.users.forEach((user: User, index: number) => {
         if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase().trim()) {
+          user.previousOrder = this.loggedIn ? this.activeUser.previousOrder : this.setPreviousOrder(user);
           this.stuntCompletions(user);
           this.loggedIn = true;
           user.loggedIn = true;
           this.activeUser = user;
           this.cookieService.set('_auth_cookie', credsString);
           this.storedCreds = credsString;
-          this.stuntUsers.splice(index,1);
           this.loginFail = false;
         }
       });
@@ -159,6 +164,20 @@ export class ParentComponent implements OnInit {
       this.loggedIn = false;
       this.loginFail = true;
     }
+  }
+
+  setPreviousOrder(user: User): PreviousOrder {
+    let prevOrder = new PreviousOrder();
+
+    if(user.jsonPreviousOrder !== undefined) {
+      prevOrder = JSON.parse(user.jsonPreviousOrder);
+    }
+
+    if(prevOrder.timestamp === undefined || prevOrder!.timestamp > prevOrder!.timestamp + 600000) {
+      this.firestoreService.updateUserPreviousOrder(user.id!, this.previousOrder);
+    }
+
+    return prevOrder;
   }
 
   stuntCompletions(user: User): void {
