@@ -44,7 +44,7 @@
       <mat-form-field class="select">
         <mat-label class="label">Witness</mat-label>
         <mat-select formControlName="witness" placeholder="select a witness" class="label">
-          <mat-option *ngFor="let user of users" [value]="user.firstName" class="label">
+          <mat-option *ngFor="let user of witnesses" [value]="user.firstName" class="label">
             {{user.firstName}}
           </mat-option>
         </mat-select>

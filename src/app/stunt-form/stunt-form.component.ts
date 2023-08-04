@@ -21,8 +21,7 @@ export class StuntFormComponent implements OnInit{
   @Input()
   activeUser: User = new User();
 
-  @Input()
-  users: User[] = [];
+  witnesses: User[] = [];
 
   @Input()
   userMap: Map<string, User> = new Map();
@@ -34,8 +33,6 @@ export class StuntFormComponent implements OnInit{
     witness: new FormControl(''),
     description: new FormControl('')
   });
-
-  bystander = 'Some Rando';
 
   saving = false;
 
@@ -50,11 +47,8 @@ export class StuntFormComponent implements OnInit{
   }
 
   initializeUserNames(): void {
-    this.users.sort((a, b) => a.firstName.localeCompare(b.firstName));
-    this.users.push({
-      abreviation: 'bystander',
-      firstName: this.bystander
-    });
+    this.witnesses = Array.from(this.userMap.values()).filter(user => user.id !== this.activeUser.id);
+    this.witnesses.sort((a, b) => a.firstName.localeCompare(b.firstName));
   }
 
   initializePastPerformances(): void {
@@ -117,20 +111,8 @@ export class StuntFormComponent implements OnInit{
     }
   }
 
-  getUserId(name: string) {
-    if(name === this.bystander) {
-      return 'bystander';
-    }
-
-    let retStr
-
-    this.users.forEach((user) => {
-      if(user.firstName === name) {
-        retStr = user.id
-      }
-    });
-
-    return retStr;
+  getUserId(name: string): string {
+    return this.witnesses.find(user => user.firstName === name)!.id!
   }
 
   getPointStr(): string {
