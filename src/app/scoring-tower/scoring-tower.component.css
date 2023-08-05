@@ -47,7 +47,7 @@
   background-image: url('../../assets/darklogo.jpg');
   background-repeat: no-repeat;
   background-size: 100px;
-  min-height: 100px;
+  min-height: 80px;
   padding: 30px;
   background-position: center;
   background-color: #424242;
@@ -68,11 +68,20 @@
 .up-icon {
   transform: scale(0.7);
   color: aqua;
-  align-items: center;
+  position: relative;
+  top: 2px;
 }
 
 .down-icon {
   transform: scale(0.7);
   color: #ff9100;
-  align-items: center;
+  position: fixed
+}
+
+.change-ammount {
+  text-shadow: -1px -2px 3px black;
+  position: relative;
+  right: 16px;
+  bottom: 4px;
+  /* font-family: 'formula1', 'arial', sans-serif; */
 }

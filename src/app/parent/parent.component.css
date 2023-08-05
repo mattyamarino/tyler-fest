@@ -15,4 +15,5 @@
 
 .scoring-tower {
   width: 100%;
+  /* overflow-y: scroll; */
 }
