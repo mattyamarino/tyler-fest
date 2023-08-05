@@ -32,3 +32,21 @@
     </button>
   </div>
 </div>
+
+
+<div class="container" *ngIf="data.isToggleHiddenStunts">
+  <h1 mat-dialog-title>Are You Sure You Want To {{ data.hideStunts ? 'Hide' : 'Reveal' }} Mystery Stunt</h1>
+  
+  <div mat-dialog-actions class="buttons">
+    <button mat-button (click)="onNoClick()"  mat-raised-button color="secondary">
+      <span class="button-label">
+        Go Back
+      </span>
+    </button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial  mat-raised-button color="primary">
+      <span class="button-label">
+        {{ data.hideStunts ? 'Hide' : 'Reveal' }} Stunt
+      </span>
+    </button>
+  </div>
+</div>

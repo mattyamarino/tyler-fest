@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PerformStunt, PreviousOrder, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
 import {CookieService} from 'ngx-cookie-service';
+import { OneTimeUploadService } from '../one-time-upload.service';
 
 @Component({
   selector: 'app-parent',
@@ -23,9 +24,10 @@ export class ParentComponent implements OnInit {
   loginFail = false;
   storedCreds?: string;
 
-  constructor(private firestoreService: FirestoreService, private cookieService: CookieService) { }
+  constructor(private firestoreService: FirestoreService, private cookieService: CookieService, private oneTimeUploadService: OneTimeUploadService) { }
 
   ngOnInit(): void {
+    // this.oneTimeUploadService.onetimeDataUpload();
     this.getData();
   }
 
@@ -76,10 +78,9 @@ export class ParentComponent implements OnInit {
       user.score = 0;
 
       user.performances!.forEach((performance: PerformStunt) => {
-        let points = this.stunts.find(stunt => stunt.id === performance.stuntId)!.points;
         performance.stuntName = this.stunts.find(stunt => stunt.id === performance.stuntId)!.name;
         if(!performance.isDeleted) {
-          user.score = user.score! + points;
+          user.score = user.score! + performance.points;
         }
       });
     });

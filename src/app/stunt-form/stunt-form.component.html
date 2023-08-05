@@ -1,46 +1,68 @@
 <div class="container">
+  <form [formGroup]="stuntForm" (ngSubmit)="onSubmit()">
 
-  <mat-grid-list cols="5" rowHeight="15px">
+    <mat-grid-list cols="5" rowHeight="15px">
 
-    <mat-grid-tile colspan="1" rowspan="3">
-      <mat-icon [svgIcon]="activeStunt.icon" class="icon"></mat-icon>
-    </mat-grid-tile>
+      <mat-grid-tile colspan="1" rowspan="3">
+        <mat-icon [svgIcon]="activeStunt.icon" class="icon"></mat-icon>
+      </mat-grid-tile>
 
-    <mat-grid-tile colspan="3" rowspan="2">
-      <span class="stunt-label">
-        {{activeStunt.name}}
-      </span>
-    </mat-grid-tile>
+      <mat-grid-tile colspan="3" rowspan="2">
+        <span class="stunt-label">
+          {{activeStunt.name}}
+        </span>
+      </mat-grid-tile>
 
-    <mat-grid-tile colspan="1" rowspan="3">
-      <div (click)="closeStunt()">
-        <mat-icon>close</mat-icon>
+      <mat-grid-tile colspan="1" rowspan="3">
+        <div (click)="closeStunt()">
+          <mat-icon>close</mat-icon>
+        </div>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan="3" rowspan="1">
+        <span *ngFor="let box of counter(activeStunt.maxUses); let i = index;">
+          <span *ngIf="i + 1 <= pastPerformances.length">
+            <mat-icon svgIcon="checkbox" class="checkbox-icon"></mat-icon>
+          </span>
+          <span *ngIf="i + 1 > pastPerformances.length">
+            <mat-icon svgIcon="unchecked" class="checkbox-icon"></mat-icon>
+          </span>
+        </span>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+
+    <div *ngIf="!activeStunt.judgedEvent && this.activeStunt.points.length === 1">
+      <div class="points">
+        {{ this.points }}{{ getPointStr(this.points) }}
       </div>
-    </mat-grid-tile>
+    </div>
 
-    <mat-grid-tile colspan="3" rowspan="1">
-      <span *ngFor="let box of counter(activeStunt.maxUses); let i = index;">
-        <span *ngIf="i + 1 <= pastPerformances.length">
-          <mat-icon svgIcon="checkbox" class="checkbox-icon"></mat-icon>
+    <div *ngIf="!activeStunt.judgedEvent && this.activeStunt.points.length > 1" class="points-array">
+      <div class="points-explainer">
+        current submission is worth the points highlighted
+      </div>
+      <div *ngFor="let pointValue of activeStunt.points; let i = index;" class="points-line">
+        <span [ngClass]="{'active-points': isActivePoints(i)}" class="points">
+          {{ pointValue + getPointStr(pointValue) }}
         </span>
-        <span *ngIf="i + 1 > pastPerformances.length">
-          <mat-icon svgIcon="unchecked" class="checkbox-icon"></mat-icon>
-        </span>
-      </span>
-    </mat-grid-tile>
+      </div>
+    </div>
 
-  </mat-grid-list>
+    <div class="rules">
+      {{ activeStunt.rules }}
+    </div>
 
-  <div class="points">
-    {{ activeStunt.points }}{{ getPointStr() }}
-  </div>
-
-  <div class="rules">
-    {{ activeStunt.rules }}
-  </div>
-
-  <div *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses">
-    <form [formGroup]="stuntForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()">
+      <div *ngIf="activeStunt.judgedEvent">
+        <mat-form-field class="select">
+          <mat-select formControlName="points" placeholder="Select Points Value" class="label">
+            <mat-option *ngFor="let pointValue of judgedPoints;" [value]="pointValue" class="label">
+              {{ pointValue + getPointStr(pointValue) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <mat-form-field class="select">
         <mat-label class="label">Witness</mat-label>
         <mat-select formControlName="witness" placeholder="select a witness" class="label">
@@ -58,52 +80,57 @@
       <button mat-raised-button color="primary" class="button" [disabled]="isDisabled()">
         <span class="button-label">Submit</span>
       </button>
-    </form>
-  </div>
-
-  <div class="past-performances" *ngFor="let performance of pastPerformances; let i = index;">
-    <div [ngClass]="{'odd-performance': isOdd(i)}" class="performance">
-
-      <div class="performance-info">
-        <div class="timestamp">
-          {{ performance.timestamp | date:'medium' }}
-        </div>
-        <div>
-          Witness: {{ userMap.get(performance.witnessId)!.firstName }}
-        </div>
-        <div>
-          {{ performance.description }}
-        </div>
-      </div>
-
-
-      <div (click)="deletePerformStunt(performance, true)" class="action-icon" *ngIf="!activeUser.isSuspended">
-        <mat-icon>delete</mat-icon>
-      </div>
-
     </div>
-  </div>
 
-  <div class="past-performances" *ngFor="let deletedPerformance of deletedPerformances; let i = index;">
-    <div [ngClass]="{'odd-performance': isOdd(i + pastPerformances.length)}" class="deleted-performance">
+    <div class="past-performances" *ngFor="let performance of pastPerformances; let i = index;">
+      <div [ngClass]="{'odd-performance': isOdd(i)}" class="performance">
 
-      <div class="performance-info">
-        <div class="timestamp">
-          {{ deletedPerformance.timestamp | date:'medium' }}
+        <div class="performance-info">
+          <div class="timestamp">
+            {{ performance.timestamp | date:'medium' }}
+          </div>
+          <div>
+            {{ performance.points + getPointStr(performance.points) }}
+          </div>
+          <div>
+            Witness: {{ userMap.get(performance.witnessId)!.firstName }}
+          </div>
+          <div>
+            {{ performance.description }}
+          </div>
         </div>
-        <div>
-          Witness: {{ userMap.get(deletedPerformance.witnessId)!.firstName }}
+
+
+        <div (click)="deletePerformStunt(performance, true)" class="action-icon" *ngIf="!activeUser.isSuspended">
+          <mat-icon>delete</mat-icon>
         </div>
-        <div>
-          {{ deletedPerformance.description }}
-        </div>
+
       </div>
-
-
-      <div (click)="deletePerformStunt(deletedPerformance, false)" class="action-icon" *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses">
-        <mat-icon>settings_backup_restore</mat-icon>
-      </div>
-
     </div>
-  </div>
+
+    <div class="past-performances" *ngFor="let deletedPerformance of deletedPerformances; let i = index;">
+      <div [ngClass]="{'odd-performance': isOdd(i + pastPerformances.length)}" class="deleted-performance">
+
+        <div class="performance-info">
+          <div class="timestamp">
+            {{ deletedPerformance.timestamp | date:'medium' }}
+          </div>
+          <div>
+            Witness: {{ userMap.get(deletedPerformance.witnessId)!.firstName }}
+          </div>
+          <div>
+            {{ deletedPerformance.description }}
+          </div>
+        </div>
+
+
+        <div (click)="deletePerformStunt(deletedPerformance, false)" class="action-icon"
+          *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses">
+          <mat-icon>settings_backup_restore</mat-icon>
+        </div>
+
+      </div>
+    </div>
+  </form>
+
 </div>

@@ -81,3 +81,33 @@
   align-self: center;
 }
 
+.points-explainer {
+  font-size: 8px;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 17px;
+  padding-bottom: 7px;
+}
+
+.active-points {
+  text-shadow: white 1px 0 7px;
+  color:  rgb(79, 78, 78);
+}
+
+.points {
+  padding-top: 17px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.points-array {
+  text-align: center;
+}
+
+.points-line {
+  display: inline;
+}
+

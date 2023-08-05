@@ -1,20 +1,12 @@
 ********** TODO **********
 disable restore button in admin page if stunt at max uses
-add scoring position update
 update snackbar styling (margin, color)
 add specific snackbar messages?
 add error handling for firestore requests
 
-switch darksun logo to be high res copy
-remove rando from witness list
 add spectator view?
 
-add mystery stunt, that can only be completed after gamemaster marks as active
-
-variable stunt scoring
-also option where each performStunt completion is a different points value
-
-gambling - top 3 get points, based on position
+bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
 
 
 ********** DONE **********
@@ -31,3 +23,10 @@ allow login without cookie
 depricate stuntMap replace with .find()
 disable restore perform stunt icon if unable to perform action
 add admin button to suspend new entries/deletes/restores
+switch darksun logo to be high res copy
+remove rando from witness list
+gambling - top 3 get points, based on position
+variable stunt scoring
+also option where each performStunt completion is a different points value
+add mystery stunt, that can only be completed after gamemaster marks as active
+add scoring position update
