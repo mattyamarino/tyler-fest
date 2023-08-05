@@ -4,7 +4,6 @@ update snackbar styling (margin, color)
 add specific snackbar messages?
 add error handling for firestore requests
 
-add spectator view?
 
 bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
 
@@ -30,3 +29,4 @@ variable stunt scoring
 also option where each performStunt completion is a different points value
 add mystery stunt, that can only be completed after gamemaster marks as active
 add scoring position update
+add spectator view?

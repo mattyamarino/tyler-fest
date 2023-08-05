@@ -135,7 +135,13 @@ export class ParentComponent implements OnInit {
   authenticate(credsString: string): void {
     let creds = credsString.split('~');
 
-    if(creds[0].toLocaleLowerCase().trim() === 'admin' && creds[1].trim() === this.adminKey) {
+    if(creds[0] === 'spectate') {
+      this.loggedIn = true;
+      this.loginFail = false;
+      this.activeUser.id = 'spectator';
+      this.storedCreds = credsString;
+      
+    } else if(creds[0].toLocaleLowerCase().trim() === 'admin' && creds[1].trim() === this.adminKey) {
       this.loggedIn = true;
       this.loginFail = false;
       this.activeUser.id = 'admin';

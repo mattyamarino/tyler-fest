@@ -17,6 +17,9 @@ export class StuntHistoryComponent implements OnInit{
   @Input()
   userMap: Map<string, User> = new Map();
 
+  @Input()
+  activeUser: User = new User();
+
   isSuspended!: boolean;
   areStuntsHidden!: boolean;
 

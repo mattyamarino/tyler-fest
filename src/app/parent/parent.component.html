@@ -11,10 +11,10 @@
           <div class="component-container" *ngIf="!loggedIn">
             <app-login (loginEvent)="authenticate($event)" [loginFail]="loginFail"></app-login>
           </div>
-          <div class="component-container" *ngIf="activeStunt === null && loggedIn && activeUser.id !== 'admin'">
+          <div class="component-container" *ngIf="activeStunt === null && loggedIn && activeUser.id !== 'admin' && activeUser.id !== 'spectator'">
             <app-stunt-list (stuntEvent)="toggleStunt($event.id!)" [stunts]="stunts"></app-stunt-list>
           </div>
-          <div class="component-container" *ngIf="activeStunt !== null && loggedIn && activeUser.id !== 'admin'">
+          <div class="component-container" *ngIf="activeStunt !== null && loggedIn && activeUser.id !== 'admin' && activeUser.id !== 'spectator'">
             <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
             [activeStunt]="activeStunt" 
             [activeUser]="activeUser"
@@ -22,8 +22,9 @@
             #stuntForm>
           </app-stunt-form>
           </div>
-          <div class="component-container" *ngIf="loggedIn && activeUser.id === 'admin'">
+          <div class="component-container" *ngIf="loggedIn && (activeUser.id === 'admin' || activeUser.id === 'spectator')">
             <app-stunt-history 
+            [activeUser]="activeUser"
             [users]="users"
             [userMap]="userMap">
           </app-stunt-history>

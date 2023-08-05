@@ -116,6 +116,9 @@
             {{ deletedPerformance.timestamp | date:'medium' }}
           </div>
           <div>
+            {{ deletedPerformance.points + getPointStr(deletedPerformance.points) }}
+          </div>
+          <div>
             Witness: {{ userMap.get(deletedPerformance.witnessId)!.firstName }}
           </div>
           <div>
