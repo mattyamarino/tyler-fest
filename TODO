@@ -3,6 +3,7 @@ add error handling for firestore requests
 show number of positions changed
 add more secure auth
 secure firestore to only accept requests from ui
+dont make new calls if spectator logs out
 
 only pull stunts when user logs in
 disable restore button in admin page if stunt at max uses
