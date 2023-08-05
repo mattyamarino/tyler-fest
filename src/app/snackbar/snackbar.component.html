@@ -1,6 +1,14 @@
-<div class="container">
-  <mat-icon>check_circle</mat-icon>  
-  <span class="label">
-    You Did A Thing!
-  </span>
+<div class="snackbar-container">
+  <div *ngIf="!data.hasError" class="success">
+    <mat-icon>check_circle</mat-icon>  
+    <span class="snackbar-label">
+      {{ getMessage() }}
+    </span>
+  </div>
+  <div *ngIf="data.hasError" class="error">
+    <mat-icon>error</mat-icon>    
+    <span class="label">
+      {{ getMessage() }}
+    </span>
+  </div>
 </div>

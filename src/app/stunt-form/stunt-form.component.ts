@@ -52,7 +52,10 @@ export class StuntFormComponent implements OnInit{
   }
 
   initializePoints(): void {
-    this.points = this.activeStunt.points[this.activeStunt.completions!.size!];
+    const index = this.activeStunt.completions!.size < this.activeStunt.points.length ? this.activeStunt.completions!.size : 0
+
+    this.points = this.activeStunt.points[index];
+
     if(this.activeStunt.judgedEvent) {
       let counter = this.activeStunt.points[0];
       while(counter <= this.activeStunt.points[1]) {
@@ -131,7 +134,10 @@ export class StuntFormComponent implements OnInit{
       this._snackBar.openFromComponent(SnackbarComponent, {
         horizontalPosition: 'center',
         verticalPosition: 'top',
-        duration: 2500
+        duration: 4000,
+        data: {
+          hasError: false
+        }
       });
 
       this.stuntEvent.emit(this.activeStunt);

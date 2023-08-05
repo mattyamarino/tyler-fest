@@ -1,10 +1,11 @@
 ********** TODO **********
-disable restore button in admin page if stunt at max uses
-update snackbar styling (margin, color)
-add specific snackbar messages?
 add error handling for firestore requests
+show number of positions changed
+add more secure auth
+secure firestore to only accept requests from ui
 
-
+only pull stunts when user logs in
+disable restore button in admin page if stunt at max uses
 bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
 
 
@@ -30,3 +31,5 @@ also option where each performStunt completion is a different points value
 add mystery stunt, that can only be completed after gamemaster marks as active
 add scoring position update
 add spectator view?
+update snackbar styling (margin, color)
+add specific snackbar messages?

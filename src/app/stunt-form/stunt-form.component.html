@@ -40,7 +40,9 @@
 
     <div *ngIf="!activeStunt.judgedEvent && this.activeStunt.points.length > 1" class="points-array">
       <div class="points-explainer">
-        current submission is worth the points highlighted
+        <span *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()" >
+          current submission is worth the points highlighted
+        </span>
       </div>
       <div *ngFor="let pointValue of activeStunt.points; let i = index;" class="points-line">
         <span [ngClass]="{'active-points': isActivePoints(i)}" class="points">
