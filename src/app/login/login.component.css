@@ -1,6 +1,6 @@
 .container {
   min-width: 70%;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 25px;
   background-color: #ff9100;
   border: 1px solid;
