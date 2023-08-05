@@ -51,6 +51,12 @@
       </div>
     </div>
 
+    <div *ngIf="activeStunt.judgedEvent">
+      <div class="points">
+        {{ getPointStr(this.points, true) }}
+      </div>
+    </div>
+
     <div class="rules">
       {{ activeStunt.rules }}
     </div>

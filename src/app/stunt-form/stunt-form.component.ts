@@ -152,7 +152,11 @@ export class StuntFormComponent implements OnInit{
     return (this.activeStunt.completions!.size) === index
   }
 
-  getPointStr(pointsValue: number): string {
+  getPointStr(pointsValue: number , isForJudgedEvent?: boolean): string {
+    if(isForJudgedEvent) {
+      return `${this.judgedPoints[0]}-${this.judgedPoints[this.judgedPoints.length -1]}pts`
+    }
+
     return pointsValue !== 1 ? 'pts' : 'pt'
   }
 
