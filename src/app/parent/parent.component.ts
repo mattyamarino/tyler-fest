@@ -145,7 +145,7 @@ export class ParentComponent implements OnInit {
 
       this.users.forEach((user: User, index: number) => {
         if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase().trim()) {
-          user.previousOrder = this.loggedIn ? this.activeUser.previousOrder : this.setPreviousOrder(user);
+          user.previousOrder = this.setPreviousOrder(user);
           this.stuntCompletions(user);
           this.loggedIn = true;
           user.loggedIn = true;
@@ -173,7 +173,7 @@ export class ParentComponent implements OnInit {
       prevOrder = JSON.parse(user.jsonPreviousOrder);
     }
 
-    if(prevOrder.timestamp === undefined || prevOrder!.timestamp > prevOrder!.timestamp + 600000) {
+    if(prevOrder.timestamp === undefined || Date.now() > prevOrder!.timestamp + 600000) {
       this.firestoreService.updateUserPreviousOrder(user.id!, this.previousOrder);
     }
 
