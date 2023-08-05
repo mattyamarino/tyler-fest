@@ -52,6 +52,11 @@
     </div>
 
     <div *ngIf="activeStunt.judgedEvent">
+      <div class="points-explainer-judged">
+        <span *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()" >
+          variable score stunt, please select points below
+        </span>
+      </div>
       <div class="points">
         {{ getPointStr(this.points, true) }}
       </div>

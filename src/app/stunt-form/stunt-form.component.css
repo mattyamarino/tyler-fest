@@ -84,6 +84,15 @@
   color: rgb(95, 95, 95);
 }
 
+.points-explainer-judged {
+  font-size: 8px;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 23px;
+  margin-bottom: -10px;
+  color: rgb(95, 95, 95);
+}
+
 .active-points {
   text-shadow: 0 0 7px #fff, 0 0 7px #fff, 0 0 7px #ffffff, 0 0 7px #ffffff;  
   color:  rgb(79, 78, 78);
