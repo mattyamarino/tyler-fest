@@ -135,7 +135,7 @@ export class StuntFormComponent implements OnInit{
       this._snackBar.openFromComponent(SnackbarComponent, {
         horizontalPosition: 'center',
         verticalPosition: 'top',
-        duration: 5000000,
+        duration: 5300,
         data: {
           hasError: false,
           userMessages: this.activeUser.messages,
