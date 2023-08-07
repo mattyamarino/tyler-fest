@@ -40,7 +40,7 @@
 
     <div *ngIf="!activeStunt.judgedEvent && this.activeStunt.points.length > 1" class="points-array">
       <div class="points-explainer">
-        <span *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()" >
+        <span *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()">
           current submission is worth the points highlighted
         </span>
       </div>
@@ -53,7 +53,7 @@
 
     <div *ngIf="activeStunt.judgedEvent">
       <div class="points-explainer-judged">
-        <span *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()" >
+        <span *ngIf="!activeUser.isSuspended && pastPerformances.length < activeStunt.maxUses && showStunt()">
           variable score stunt, please select points below
         </span>
       </div>

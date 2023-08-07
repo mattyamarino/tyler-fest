@@ -1,5 +1,6 @@
 .container {
   min-width: 70%;
+  width: 70%;
   overflow-y: auto;
   margin: 25px;
   background-color: #ff9100;

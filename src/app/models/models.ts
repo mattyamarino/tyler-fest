@@ -12,6 +12,7 @@ export class User {
   jsonPreviousOrder?: string;
   isSuspended?: boolean;
   showHidden?: boolean;
+  messages?: SnackbarMessage[];
 }
 
 export class PerformStunt {
@@ -35,10 +36,19 @@ export class Stunt {
   completions?: Set<string>
   deletedCompletions?: Set<string>
   isHidden?: boolean;
+  messages?: SnackbarMessage[];
 }
 
 
 export class PreviousOrder {
   timestamp!: number;
   userList?: User[];
+}
+
+
+export class SnackbarMessage {
+  message!: string;
+  showOnlyIfSubmissionNumber?: number;
+  showOnlyIfDeletedSubmissions?: boolean;
+  showOnlyIfPointsMatch?: number;
 }

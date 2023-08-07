@@ -4,20 +4,33 @@
   font-weight: 700;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin: 10px;
+  white-space: pre-wrap;
+  width: 80%
 }
 
 .snackbar-label {
+  flex: 5;
   margin-left: 10px;
 }
 
-.success {
-  color: rgb(0, 162, 255);
+.snackbar-icon {
+  flex: 1;
 }
 
-.error {
+.snackbar-success {
+  color: rgb(0, 162, 255);
+  display: flex;
+}
+
+.snackbar-error {
   color: rgb(255, 136, 0);
+  display: flex;
 }
 
 .cdk-overlay-pane { position: fixed !important; top: 50px; }
 
 
+.mat-mdc-snack-bar-container {
+  max-width: 80% !important;
+  margin: auto;
+}

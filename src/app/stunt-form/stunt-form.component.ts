@@ -116,13 +116,14 @@ export class StuntFormComponent implements OnInit{
   onSubmit() {
     if(!this.saving) {
       this.saving = true;
+      const pointsToSave = this.activeStunt.judgedEvent ? this.stuntForm.get('points')!.value! : this.points;
 
       const performStunt = {
         witnessId: this.getUserId(this.stuntForm.get('witness')!.value!)!,
         description: this.stuntForm.get('description')!.value!.trim(),
         stuntId: this.activeStunt.id!,
         timestamp: Date.now(),
-        points: this.activeStunt.judgedEvent ? this.stuntForm.get('points')!.value! : this.points
+        points: pointsToSave
       }
 
       this.pastPerformances.push(performStunt);
@@ -134,9 +135,14 @@ export class StuntFormComponent implements OnInit{
       this._snackBar.openFromComponent(SnackbarComponent, {
         horizontalPosition: 'center',
         verticalPosition: 'top',
-        duration: 4000,
+        duration: 5000000,
         data: {
-          hasError: false
+          hasError: false,
+          userMessages: this.activeUser.messages,
+          stuntMessages: this.activeStunt.messages,
+          stuntCompletions: this.pastPerformances.length,
+          stuntPoints: pointsToSave,
+          hasDeletedPerforms: this.deletedPerformances.length > 0 ? true :false
         }
       });
 
