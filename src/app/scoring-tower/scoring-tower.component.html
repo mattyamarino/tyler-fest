@@ -38,7 +38,7 @@
     <ng-container matColumnDef="change">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let user">
-        <div *ngIf="getChange(user) === -1">
+        <div *ngIf="getChange(user) === -1" class="change-overlay">
           <span class="up-icon">
             <mat-icon>expand_less</mat-icon>
           </span>
@@ -49,7 +49,7 @@
         <div *ngIf="getChange(user) === 0" class="hyphon">
           -
         </div>
-        <div *ngIf="getChange(user) === 1">
+        <div *ngIf="getChange(user) === 1" class="change-overlay">
           <span class="down-icon">
             <mat-icon>expand_more</mat-icon>
           </span>

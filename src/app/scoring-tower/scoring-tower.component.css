@@ -17,6 +17,7 @@
   padding-right: 0px;
   font-size: 11px;
   font-family: 'formula1', 'arial', sans-serif;
+  -webkit-text-stroke: 0.3px black;
 }
 
 .mat-column-position { 
@@ -74,8 +75,8 @@
 
 .down-icon {
   color: #ff9100;
-  position: fixed;
-  top: 0.3rem;
+  position: relative;
+  top: 0.6rem;
 }
 
 .hyphon {
@@ -90,4 +91,10 @@
   font-size: 8px;
   bottom: 0.78rem;
   font-family: 'formula1', 'arial', sans-serif;
+}
+
+.change-overlay {
+  margin: auto;
+  width: 24px !important;
+  max-width: 24px !important;
 }

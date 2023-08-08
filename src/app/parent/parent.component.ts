@@ -115,11 +115,10 @@ export class ParentComponent implements OnInit {
   }
 
   configureLogin(): void {
+    let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
     
     if (!this.loggedIn) {
 
-      let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
-      
       if (creds !== undefined) {
         this.authenticate(creds!);
       } else {
@@ -128,7 +127,7 @@ export class ParentComponent implements OnInit {
 
     } else {
 
-      this.stuntCompletions(this.activeUser);
+      this.initializeActiveUser(creds!, this.activeUser.firstName);
 
     }
   }
@@ -159,18 +158,7 @@ export class ParentComponent implements OnInit {
 
     } else if (creds[1].trim() === this.key) {
 
-      this.users.forEach((user: User, index: number) => {
-        if (user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase().trim()) {
-          user.previousOrder = this.setPreviousOrder(user);
-          this.stuntCompletions(user);
-          this.loggedIn = true;
-          user.loggedIn = true;
-          this.activeUser = user;
-          this.cookieService.set('_auth_cookie', credsString);
-          this.storedCreds = credsString;
-          this.loginFail = false;
-        }
-      });
+      this.initializeActiveUser(credsString, creds[0]);
 
       if (!this.loggedIn) {
         this.loggedIn = false;
@@ -194,6 +182,20 @@ export class ParentComponent implements OnInit {
     }
 
     return prevOrder;
+  }
+
+  initializeActiveUser(credsString: string, firstname: string): void {
+    this.users.find((user: User) => {
+      if (user.firstName.toLocaleLowerCase() === firstname.toLocaleLowerCase().trim()) {
+        this.loggedIn = true;
+        this.loginFail = false;
+        this.storedCreds = credsString;
+        this.cookieService.set('_auth_cookie', credsString);
+        user.previousOrder = this.setPreviousOrder(user);
+        this.stuntCompletions(user);
+        user.loggedIn = true;
+        this.activeUser = user;        }
+    });
   }
 
   stuntCompletions(user: User): void {

@@ -95,6 +95,7 @@
 
 .active-points {
   text-shadow: 0 0 7px #fff, 0 0 7px #fff, 0 0 7px #ffffff, 0 0 7px #ffffff;  
+  -webkit-text-stroke: 0.3px rgb(255, 255, 255);
   color:  rgb(79, 78, 78);
 }
 
