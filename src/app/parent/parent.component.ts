@@ -170,6 +170,20 @@ export class ParentComponent implements OnInit {
     }
   }
 
+  initializeActiveUser(credsString: string, firstname: string): void {
+    this.users.find((user: User) => {
+      if (user.firstName.toLocaleLowerCase() === firstname.toLocaleLowerCase().trim()) {
+        user.previousOrder = this.loggedIn ? this.activeUser.previousOrder : this.setPreviousOrder(user);
+        this.loggedIn = true;
+        this.loginFail = false;
+        this.storedCreds = credsString;
+        this.cookieService.set('_auth_cookie', credsString);
+        this.stuntCompletions(user);
+        user.loggedIn = true;
+        this.activeUser = user;        }
+    });
+  }
+
   setPreviousOrder(user: User): PreviousOrder {
     let prevOrder = new PreviousOrder();
 
@@ -181,21 +195,7 @@ export class ParentComponent implements OnInit {
       this.firestoreService.updateUserPreviousOrder(user.id!, this.previousOrder);
     }
 
-    return prevOrder;
-  }
-
-  initializeActiveUser(credsString: string, firstname: string): void {
-    this.users.find((user: User) => {
-      if (user.firstName.toLocaleLowerCase() === firstname.toLocaleLowerCase().trim()) {
-        this.loggedIn = true;
-        this.loginFail = false;
-        this.storedCreds = credsString;
-        this.cookieService.set('_auth_cookie', credsString);
-        user.previousOrder = this.setPreviousOrder(user);
-        this.stuntCompletions(user);
-        user.loggedIn = true;
-        this.activeUser = user;        }
-    });
+    return prevOrder.timestamp === undefined ? this.previousOrder : prevOrder;
   }
 
   stuntCompletions(user: User): void {
@@ -213,12 +213,15 @@ export class ParentComponent implements OnInit {
   }
 
   logout(): void {
+    const id = this.activeUser.id;
     this.cookieService.delete('_auth_cookie', '/');
-    // this.cookieService.deleteAll();
     this.storedCreds = undefined;
     this.loggedIn = false;
     this.activeUser = new User();
-    this.getData();
+
+    if(id !== 'spectator') {
+      this.getData();
+    }
   }
 
 }

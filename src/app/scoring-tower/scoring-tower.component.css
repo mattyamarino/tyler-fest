@@ -8,16 +8,17 @@
 .active-user {
   color: rgb(127, 227, 255);
   font-weight: 600;
-  text-shadow: white 1px 0 10px;
+  text-shadow: white 0 0 8px;
 }
 
 .mat-column-name {
   max-width: 10px;
   padding-left: 0px;
-  padding-right: 0px;
+  padding-right: 3px;
   font-size: 11px;
   font-family: 'formula1', 'arial', sans-serif;
   -webkit-text-stroke: 0.3px black;
+  text-align: center;
 }
 
 .mat-column-position { 
