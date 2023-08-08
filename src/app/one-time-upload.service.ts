@@ -16,6 +16,12 @@ export class OneTimeUploadService {
   hardcodedUser1: User = {
     firstName: 'Matt',
     abreviation: 'YAM',
+    messages: [
+      {
+        message: 'Yup',
+        showOnlyIfDeletedSubmissions: true
+      },
+    ]
   }
 
   hardcodedUser2: User = {
@@ -24,9 +30,6 @@ export class OneTimeUploadService {
     messages: [
       {
         message: 'Is it weird I know what your thinking right now?'
-      },
-      {
-        message: 'Do you think a hippopatumus could take a rhino in a fight?'
       },
       {
         message: 'I mean WTF happened to Tickly Tuesday?'
@@ -82,6 +85,9 @@ export class OneTimeUploadService {
     firstName: 'Craig',
     abreviation: 'KEG',
     messages: [
+      {
+        message: 'I believe that was what was called a pro gamer move'
+      },
       {
         message: 'That was great, not as great as your drives at Top Golf, but still great'
       },
@@ -274,6 +280,10 @@ export class OneTimeUploadService {
     points: [1, 2, 3],
     icon: 'paper-cup',
     messages: [
+      {
+        message: 'Helps to have good teammates, but still counts',
+        showOnlyIfSubmissionNumber: 2
+      },
       {
         message: 'What cant you flip!?',
         showOnlyIfSubmissionNumber: 3
