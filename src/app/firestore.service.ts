@@ -38,13 +38,14 @@ export class FirestoreService {
     return this.firestore.collection('users').doc(id).update({
       jsonPreviousOrder: jsonStr
     })
-    .then(() => {
-      console.log("User " + id + " successfully updated!");
-    })
-    .catch((error) => {
-      console.error("Error updating document: ", error);
-    });
-}
+      .then(() => {
+        console.log("User " + id + " successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+  }
+
   updateUserSuspension(id: string, isSuspended: boolean) {
     return this.firestore.collection('users').doc(id).update({
       isSuspended: isSuspended
@@ -57,29 +58,43 @@ export class FirestoreService {
       });
   }
 
-// ONE TIME FUNCTIONS
+
+  updateUserStuntsHidden(id: string, showHidden: boolean) {
+    return this.firestore.collection('users').doc(id).update({
+      showHidden: showHidden
+    })
+      .then(() => {
+        console.log("User " + id + " successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+  }
+
+
+  // ONE TIME FUNCTIONS
   uploadData(users: User[], stunts: Stunt[]) {
 
     users.forEach(user => {
       this.firestore.collection('users')
-      .add(user)
-      .then((docRef) => {
-        console.log("Item History written with ID: ", docRef.id);
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
+        .add(user)
+        .then((docRef) => {
+          console.log("User written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+        });
     });
 
     stunts.forEach(stunt => {
       this.firestore.collection('stunts')
-      .add(stunt)
-      .then((docRef) => {
-        console.log("Item History written with ID: ", docRef.id);
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
+        .add(stunt)
+        .then((docRef) => {
+          console.log("Stunt written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+        });
     });
   }
 }

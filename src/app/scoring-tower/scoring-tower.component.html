@@ -7,7 +7,9 @@
     <div *ngIf="activeUser.id !== undefined">
       <button mat-raised-button color="secondary" class="button" (click)="logout()">
         <mat-icon class="logout-button">exit_to_app</mat-icon>
-        <span class="button-label  logout-button">Logout</span>
+        <span class="button-label  logout-button">
+          {{ activeUser.id === 'spectator' ? 'Go Back' : 'Logout' }}
+        </span>
       </button>  
     </div>
   </div>

@@ -1,6 +1,7 @@
 .container {
   min-width: 70%;
-  overflow-y: scroll;
+  width: 70%;
+  overflow-y: auto;
   margin: 25px;
   background-color: #ff9100;
   border: 1px solid;
@@ -21,6 +22,7 @@
 }
 
 .login-field {
+  margin-top: 17px;
   font-size: 11px;
   max-width: 100%;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
@@ -35,6 +37,7 @@
 
 .button {
   width: 100%;
+  margin-top: 17px;
   margin-bottom: 17px;
 }
 

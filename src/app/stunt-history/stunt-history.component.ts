@@ -17,12 +17,17 @@ export class StuntHistoryComponent implements OnInit{
   @Input()
   userMap: Map<string, User> = new Map();
 
+  @Input()
+  activeUser: User = new User();
+
   isSuspended!: boolean;
+  areStuntsHidden!: boolean;
 
   constructor(public dialog: MatDialog, private firestoreService: FirestoreService) {}
 
   ngOnInit() {
     this.isSuspended = this.users[0].isSuspended !== undefined ? this.users[0].isSuspended : false;
+    this.areStuntsHidden = this.users[0].showHidden !== undefined ? !this.users[0].showHidden : true;
 
     this.initializeData();
   }
@@ -32,6 +37,10 @@ export class StuntHistoryComponent implements OnInit{
     this.users.forEach(user => {
       user.performances!.sort((a, b) => a.stuntName!.localeCompare(b.stuntName!) || b.timestamp - a.timestamp);
     });
+  }
+
+  getPointStr(pointsValue: number): string {
+    return pointsValue !== 1 ? 'pts' : 'pt'
   }
 
   toggleEventSuspension() {
@@ -71,13 +80,27 @@ export class StuntHistoryComponent implements OnInit{
 
       }
     });  
-
-
   }
 
   toggleUserSuspension(): void {
     this.users.forEach(user => this.firestoreService.updateUserSuspension(user.id!, !this.isSuspended));
     this.isSuspended = !this.isSuspended
+  }
+
+  toggleMysteryEvent(): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        isToggleHiddenStunts: true,
+        hideStunts: !this.areStuntsHidden,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if(result) {
+        this.users.forEach(user => this.firestoreService.updateUserStuntsHidden(user.id!, this.areStuntsHidden));
+        this.areStuntsHidden = !this.areStuntsHidden
+      }
+    });  
   }
 
   deletePerformStunt(userId: string, performance: PerformStunt, toDelete: boolean) {

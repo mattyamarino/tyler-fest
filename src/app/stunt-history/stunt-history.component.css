@@ -1,6 +1,6 @@
 .container{
   min-width: 70%;
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 85%;
   min-height: 85%;
   margin: 25px;

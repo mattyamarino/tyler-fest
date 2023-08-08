@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PerformStunt, PreviousOrder, Stunt, User } from '../models/models';
 import { FirestoreService } from '../firestore.service';
-import {CookieService} from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie-service';
+import { OneTimeUploadService } from '../one-time-upload.service';
 
 @Component({
   selector: 'app-parent',
@@ -23,9 +24,10 @@ export class ParentComponent implements OnInit {
   loginFail = false;
   storedCreds?: string;
 
-  constructor(private firestoreService: FirestoreService, private cookieService: CookieService) { }
+  constructor(private firestoreService: FirestoreService, private cookieService: CookieService, private oneTimeUploadService: OneTimeUploadService) { }
 
   ngOnInit(): void {
+    // this.oneTimeUploadService.onetimeDataUpload();
     this.getData();
   }
 
@@ -63,7 +65,7 @@ export class ParentComponent implements OnInit {
 
     this.configureLogin();
 
-    if(this.activeStunt !== null) {
+    if (this.activeStunt !== null) {
       this.activeStunt = this.stunts.find(stunt => stunt.id === this.activeStunt!.id!)!
     }
 
@@ -76,10 +78,9 @@ export class ParentComponent implements OnInit {
       user.score = 0;
 
       user.performances!.forEach((performance: PerformStunt) => {
-        let points = this.stunts.find(stunt => stunt.id === performance.stuntId)!.points;
         performance.stuntName = this.stunts.find(stunt => stunt.id === performance.stuntId)!.name;
-        if(!performance.isDeleted) {
-          user.score = user.score! + points;
+        if (!performance.isDeleted) {
+          user.score = user.score! + performance.points;
         }
       });
     });
@@ -89,11 +90,11 @@ export class ParentComponent implements OnInit {
 
   transformUsersForScoreboard(userList: User[]): User[] {
     this.stunts.sort((a, b) => a.name.localeCompare(b.name));
-    userList.sort((a, b) =>  b.score! - a.score! || a.abreviation.localeCompare(b.abreviation));
+    userList.sort((a, b) => b.score! - a.score! || a.abreviation.localeCompare(b.abreviation));
 
     let tiedPosition = 0;
 
-    userList.forEach((user: User, index: number) => {      
+    userList.forEach((user: User, index: number) => {
       if (userList[index - 1] && userList[index - 1].score === user.score) {
         user.position = tiedPosition + 1;
         user.isTied = true;
@@ -102,24 +103,33 @@ export class ParentComponent implements OnInit {
         user.position = index + 1;
       }
 
-      if(this.previousOrder.timestamp === undefined) {
+      if (this.previousOrder.timestamp === undefined) {
         this.previousOrder.timestamp = Date.now();
         this.previousOrder.userList = [];
       }
 
-      this.previousOrder.userList!.push({id:user.id, firstName: user.firstName, abreviation: user.abreviation, position: user.position});
+      this.previousOrder.userList!.push({ id: user.id, firstName: user.firstName, abreviation: user.abreviation, position: user.position });
       this.userMap.set(user.id!, user);
     });
     return userList;
   }
 
   configureLogin(): void {
-    let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
+    
+    if (!this.loggedIn) {
 
-    if(creds !== undefined) {
-      this.authenticate(creds!);
+      let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
+      
+      if (creds !== undefined) {
+        this.authenticate(creds!);
+      } else {
+        this.loggedIn = false;
+      }
+
     } else {
-      this.loggedIn = false;
+
+      this.stuntCompletions(this.activeUser);
+
     }
   }
 
@@ -129,22 +139,28 @@ export class ParentComponent implements OnInit {
     // document.cookie returns all cookies for this url
     return res ? res[1] : undefined;
     // return the regex capture if it has content, otherwise return undefined
-}
+  }
 
   authenticate(credsString: string): void {
     let creds = credsString.split('~');
 
-    if(creds[0].toLocaleLowerCase().trim() === 'admin' && creds[1].trim() === this.adminKey) {
+    if (creds[0] === 'spectate') {
+      this.loggedIn = true;
+      this.loginFail = false;
+      this.activeUser.id = 'spectator';
+      this.storedCreds = credsString;
+
+    } else if (creds[0].toLocaleLowerCase().trim() === 'admin' && creds[1].trim() === this.adminKey) {
       this.loggedIn = true;
       this.loginFail = false;
       this.activeUser.id = 'admin';
       this.cookieService.set('_auth_cookie', credsString);
       this.storedCreds = credsString;
 
-    } else if(creds[1].trim() === this.key) {
+    } else if (creds[1].trim() === this.key) {
 
       this.users.forEach((user: User, index: number) => {
-        if(user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase().trim()) {
+        if (user.firstName.toLocaleLowerCase() === creds[0].toLocaleLowerCase().trim()) {
           user.previousOrder = this.setPreviousOrder(user);
           this.stuntCompletions(user);
           this.loggedIn = true;
@@ -156,7 +172,7 @@ export class ParentComponent implements OnInit {
         }
       });
 
-      if(!this.loggedIn) {
+      if (!this.loggedIn) {
         this.loggedIn = false;
         this.loginFail = true;
       }
@@ -169,11 +185,11 @@ export class ParentComponent implements OnInit {
   setPreviousOrder(user: User): PreviousOrder {
     let prevOrder = new PreviousOrder();
 
-    if(user.jsonPreviousOrder !== undefined) {
+    if (user.jsonPreviousOrder !== undefined) {
       prevOrder = JSON.parse(user.jsonPreviousOrder);
     }
 
-    if(prevOrder.timestamp === undefined || Date.now() > prevOrder!.timestamp + 600000) {
+    if (prevOrder.timestamp === undefined || Date.now() > prevOrder!.timestamp + 600000) {
       this.firestoreService.updateUserPreviousOrder(user.id!, this.previousOrder);
     }
 
@@ -182,11 +198,11 @@ export class ParentComponent implements OnInit {
 
   stuntCompletions(user: User): void {
     user.performances?.forEach(performance => {
-      if(performance.isDeleted) {
+      if (performance.isDeleted) {
         this.stunts.find(stunt => stunt.id === performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
       } else {
         this.stunts.find(stunt => stunt.id === performance.stuntId)!.completions!.add(JSON.stringify(performance));
-      } 
+      }
     });
   }
 
@@ -196,6 +212,7 @@ export class ParentComponent implements OnInit {
 
   logout(): void {
     this.cookieService.delete('_auth_cookie', '/');
+    // this.cookieService.deleteAll();
     this.storedCreds = undefined;
     this.loggedIn = false;
     this.activeUser = new User();

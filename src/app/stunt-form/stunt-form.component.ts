@@ -31,7 +31,8 @@ export class StuntFormComponent implements OnInit{
 
   stuntForm = new FormGroup({
     witness: new FormControl(''),
-    description: new FormControl('')
+    description: new FormControl(''),
+    points: new FormControl(0)
   });
 
   saving = false;
@@ -39,11 +40,29 @@ export class StuntFormComponent implements OnInit{
   pastPerformances: PerformStunt[] = [];
   deletedPerformances: PerformStunt[] =[];
 
+  points: number = 0;
+  judgedPoints: number[] = [];
+
   constructor(public dialog: MatDialog, private _snackBar: MatSnackBar, private firestoreService: FirestoreService) {}
 
   ngOnInit(): void {
+    this.initializePoints();
     this.initializeUserNames();
     this.initializePastPerformances();
+  }
+
+  initializePoints(): void {
+    const index = this.activeStunt.completions!.size < this.activeStunt.points.length ? this.activeStunt.completions!.size : 0
+
+    this.points = this.activeStunt.points[index];
+
+    if(this.activeStunt.judgedEvent) {
+      let counter = this.activeStunt.points[0];
+      while(counter <= this.activeStunt.points[1]) {
+        this.judgedPoints.push(counter);
+        counter++;
+      }
+    }
   }
 
   initializeUserNames(): void {
@@ -81,18 +100,30 @@ export class StuntFormComponent implements OnInit{
   }
 
   isDisabled(): boolean {
-    return this.stuntForm.get('witness')?.value === '' || this.stuntForm.get('description')?.value === '' ? true : false;
+    let judgedPointsInvalid = this.activeStunt.judgedEvent ? this.stuntForm.get('points')?.value === 0 : false
+
+    return this.stuntForm.get('witness')?.value === '' || this.stuntForm.get('description')?.value === ''  || judgedPointsInvalid ? true : false;
+  }
+
+  showStunt(): boolean {
+    if(this.activeStunt.isHidden) {
+      return this.activeUser.showHidden ? true : false;
+    }
+
+    return true;
   }
 
   onSubmit() {
     if(!this.saving) {
       this.saving = true;
+      const pointsToSave = this.activeStunt.judgedEvent ? this.stuntForm.get('points')!.value! : this.points;
 
       const performStunt = {
         witnessId: this.getUserId(this.stuntForm.get('witness')!.value!)!,
         description: this.stuntForm.get('description')!.value!.trim(),
         stuntId: this.activeStunt.id!,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        points: pointsToSave
       }
 
       this.pastPerformances.push(performStunt);
@@ -104,7 +135,15 @@ export class StuntFormComponent implements OnInit{
       this._snackBar.openFromComponent(SnackbarComponent, {
         horizontalPosition: 'center',
         verticalPosition: 'top',
-        duration: 2500
+        duration: 5300,
+        data: {
+          hasError: false,
+          userMessages: this.activeUser.messages,
+          stuntMessages: this.activeStunt.messages,
+          stuntCompletions: this.pastPerformances.length,
+          stuntPoints: pointsToSave,
+          hasDeletedPerforms: this.deletedPerformances.length > 0 ? true :false
+        }
       });
 
       this.stuntEvent.emit(this.activeStunt);
@@ -115,8 +154,16 @@ export class StuntFormComponent implements OnInit{
     return this.witnesses.find(user => user.firstName === name)!.id!
   }
 
-  getPointStr(): string {
-    return this.activeStunt.points !== 1 ? 'pts' : 'pt'
+  isActivePoints(index: number): boolean  {
+    return (this.activeStunt.completions!.size) === index
+  }
+
+  getPointStr(pointsValue: number , isForJudgedEvent?: boolean): string {
+    if(isForJudgedEvent) {
+      return `${this.judgedPoints[0]}-${this.judgedPoints[this.judgedPoints.length -1]}pts`
+    }
+
+    return pointsValue !== 1 ? 'pts' : 'pt'
   }
 
   deletePerformStunt(performance: PerformStunt, toDelete: boolean) {

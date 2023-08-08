@@ -30,6 +30,14 @@ export class LoginComponent {
     }
   }
 
+  spectate(): void {
+    if(!this.submitting) {
+      this.submitting = true;
+      this.loginEvent.emit('spectate~');
+      this.submitting = false;
+    }
+  }
+
   isDisabled(): boolean {
     return this.loginForm.get('username')?.value === '' || this.loginForm.get('password')?.value === '' ? true : false;
   }

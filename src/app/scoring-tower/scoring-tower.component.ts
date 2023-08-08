@@ -37,11 +37,7 @@ export class ScoringTowerComponent implements OnInit {
       prevPos = this.activeUser!.previousOrder!.userList!.find(u => u.id === user.id)!.position!
     } 
 
-    // if(user.position === prevPos || prevPos === 0) {
-    //   return 0;
-    // }
-
-    if(prevPos === 0) {
+    if(user.position === prevPos || prevPos === 0) {
       return 0;
     }
 

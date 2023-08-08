@@ -11,6 +11,8 @@ export class User {
   previousOrder?: PreviousOrder;
   jsonPreviousOrder?: string;
   isSuspended?: boolean;
+  showHidden?: boolean;
+  messages?: SnackbarMessage[];
 }
 
 export class PerformStunt {
@@ -18,6 +20,7 @@ export class PerformStunt {
   stuntId!: string;
   description!: string;
   timestamp!: number;
+  points!: number;
   isDeleted?: boolean;
   stuntName?: string;
 }
@@ -27,14 +30,25 @@ export class Stunt {
   name!: string;
   rules!: string;
   maxUses!: number;
-  points!: number;
+  points!: number[];
   icon!: string;
+  judgedEvent?: boolean;
   completions?: Set<string>
   deletedCompletions?: Set<string>
+  isHidden?: boolean;
+  messages?: SnackbarMessage[];
 }
 
 
 export class PreviousOrder {
   timestamp!: number;
   userList?: User[];
+}
+
+
+export class SnackbarMessage {
+  message!: string;
+  showOnlyIfSubmissionNumber?: number;
+  showOnlyIfDeletedSubmissions?: boolean;
+  showOnlyIfPointsMatch?: number;
 }
