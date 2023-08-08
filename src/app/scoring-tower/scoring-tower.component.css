@@ -67,11 +67,27 @@
 }
 
 .up-icon {
-  transform: scale(0.7);
   color: aqua;
+  position: relative;
+  top: 0.3rem;
 }
 
 .down-icon {
-  transform: scale(0.7);
   color: #ff9100;
+  position: fixed;
+  top: 0.3rem;
+}
+
+.hyphon {
+  font-family: 'formula1', 'arial', sans-serif;
+  font-weight: 900;
+}
+
+.change-ammount {
+  text-shadow: 0 0 3px black, 0 0 5px black;  
+  -webkit-text-stroke: 0.3px black;
+  position: relative;
+  font-size: 8px;
+  bottom: 0.78rem;
+  font-family: 'formula1', 'arial', sans-serif;
 }
