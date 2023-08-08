@@ -23,7 +23,6 @@ export class ScoringTowerComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    
   }
 
   logout(): void {
