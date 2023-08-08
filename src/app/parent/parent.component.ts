@@ -34,25 +34,7 @@ export class ParentComponent implements OnInit {
   getData(): void {
     this.firestoreService.getUsers().subscribe(async userRes => {
       let unformattedUsers = <User[]>userRes;
-      if (this.stunts.length === 0) {
-        this.firestoreService.getStunts().subscribe(stuntRes => {
-
-          stuntRes.docs.forEach(doc => {
-            let stunt = <Stunt>doc.data();
-            stunt.id = doc.id;
-            stunt.completions = new Set();
-            stunt.deletedCompletions = new Set();
-            this.stunts.push(stunt);
-          });
-          this.initializeData(unformattedUsers);
-        });
-      } else {
-        this.stunts.forEach(stunt => {
-          stunt.completions = new Set();
-          stunt.deletedCompletions = new Set();
-        });
-        this.initializeData(unformattedUsers);
-      }
+      this.initializeData(unformattedUsers);
     });
   }
 
@@ -65,10 +47,6 @@ export class ParentComponent implements OnInit {
 
     this.configureLogin();
 
-    if (this.activeStunt !== null) {
-      this.activeStunt = this.stunts.find(stunt => stunt.id === this.activeStunt!.id!)!
-    }
-
     this.loading = false;
   }
 
@@ -78,7 +56,6 @@ export class ParentComponent implements OnInit {
       user.score = 0;
 
       user.performances!.forEach((performance: PerformStunt) => {
-        performance.stuntName = this.stunts.find(stunt => stunt.id === performance.stuntId)!.name;
         if (!performance.isDeleted) {
           user.score = user.score! + performance.points;
         }
@@ -89,7 +66,6 @@ export class ParentComponent implements OnInit {
   }
 
   transformUsersForScoreboard(userList: User[]): User[] {
-    this.stunts.sort((a, b) => a.name.localeCompare(b.name));
     userList.sort((a, b) => b.score! - a.score! || a.abreviation.localeCompare(b.abreviation));
 
     let tiedPosition = 0;
@@ -174,13 +150,13 @@ export class ParentComponent implements OnInit {
     this.users.find((user: User) => {
       if (user.firstName.toLocaleLowerCase() === firstname.toLocaleLowerCase().trim()) {
         user.previousOrder = this.loggedIn ? this.activeUser.previousOrder : this.setPreviousOrder(user);
-        this.loggedIn = true;
         this.loginFail = false;
         this.storedCreds = credsString;
         this.cookieService.set('_auth_cookie', credsString);
-        this.stuntCompletions(user);
+        this.initializeStunts(user);
         user.loggedIn = true;
-        this.activeUser = user;        }
+        this.activeUser = user;        
+      }
     });
   }
 
@@ -198,14 +174,46 @@ export class ParentComponent implements OnInit {
     return prevOrder.timestamp === undefined ? this.previousOrder : prevOrder;
   }
 
-  stuntCompletions(user: User): void {
+  initializeStunts(user: User): void {
+    if (this.stunts.length === 0) {  
+      this.firestoreService.getStunts().subscribe(stuntRes => {
+       stuntRes.docs.forEach(doc => {
+          let stunt = <Stunt>doc.data();
+          stunt.id = doc.id;
+          stunt.completions = new Set();
+          stunt.deletedCompletions = new Set();
+          this.stunts.push(stunt);
+        });
+
+        this.initializeActiveUserStunts(user);
+      });
+    } else {
+      this.stunts.forEach(stunt => {
+        stunt.completions = new Set();
+        stunt.deletedCompletions = new Set();
+      });
+      this.initializeActiveUserStunts(user);
+    }
+  }
+
+  initializeActiveUserStunts(user: User): void {
+    this.stunts.sort((a, b) => a.name.localeCompare(b.name));
+
     user.performances?.forEach(performance => {
+
       if (performance.isDeleted) {
         this.stunts.find(stunt => stunt.id === performance.stuntId)!.deletedCompletions!.add(JSON.stringify(performance));
       } else {
         this.stunts.find(stunt => stunt.id === performance.stuntId)!.completions!.add(JSON.stringify(performance));
       }
+      
     });
+
+    if (this.activeStunt !== null) {
+      this.activeStunt = this.stunts.find(stunt => stunt.id === this.activeStunt!.id!)!
+    }
+
+    this.loggedIn = true;
   }
 
   toggleStunt(stuntId: string): void {

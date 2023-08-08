@@ -3,7 +3,6 @@ add error handling for firestore requests
 add more secure auth
 secure firestore to only accept requests from ui
 
-only pull stunts when user logs in
 disable restore button in admin page if stunt at max uses
 bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
 
@@ -34,3 +33,4 @@ update snackbar styling (margin, color)
 add specific snackbar messages?
 dont make new calls if spectator logs out
 show number of positions changed
+only pull stunts when user logs in

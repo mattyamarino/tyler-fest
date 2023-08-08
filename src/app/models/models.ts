@@ -21,8 +21,8 @@ export class PerformStunt {
   description!: string;
   timestamp!: number;
   points!: number;
+  stuntName!: string;
   isDeleted?: boolean;
-  stuntName?: string;
 }
 
 export class Stunt {

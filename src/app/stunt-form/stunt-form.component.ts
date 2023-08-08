@@ -123,7 +123,8 @@ export class StuntFormComponent implements OnInit{
         description: this.stuntForm.get('description')!.value!.trim(),
         stuntId: this.activeStunt.id!,
         timestamp: Date.now(),
-        points: pointsToSave
+        points: pointsToSave,
+        stuntName: this.activeStunt.name
       }
 
       this.pastPerformances.push(performStunt);
