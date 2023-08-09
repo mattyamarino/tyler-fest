@@ -1,6 +1,6 @@
 <div class="background">
   <div class="container"> 
-    <div *ngIf="loading === false">
+    <div *ngIf="loadingUsers === false">
       <mat-grid-list cols="3" rowHeight="100vh">
         <mat-grid-tile colspan="1">
           <div class="scoring-tower">
@@ -8,13 +8,15 @@
           </div>
         </mat-grid-tile>
         <mat-grid-tile colspan="2">
+          <div class="component-container" *ngIf="loadingStunts">
+          </div>
           <div class="component-container" *ngIf="!loggedIn">
             <app-login (loginEvent)="authenticate($event)" [loginFail]="loginFail"></app-login>
           </div>
-          <div class="component-container" *ngIf="activeStunt === null && loggedIn && activeUser.id !== 'admin' && activeUser.id !== 'spectator'">
+          <div class="component-container" *ngIf="activeStunt === null && loggedIn && activeUser.id !== 'admin' && activeUser.id !== 'spectator' && !loadingStunts">
             <app-stunt-list (stuntEvent)="toggleStunt($event.id!)" [stunts]="stunts"></app-stunt-list>
           </div>
-          <div class="component-container" *ngIf="activeStunt !== null && loggedIn && activeUser.id !== 'admin' && activeUser.id !== 'spectator'">
+          <div class="component-container" *ngIf="activeStunt !== null && loggedIn && activeUser.id !== 'admin' && activeUser.id !== 'spectator' && !loadingStunts">
             <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
             [activeStunt]="activeStunt" 
             [activeUser]="activeUser"

@@ -15,7 +15,8 @@ export class ParentComponent implements OnInit {
   previousOrder: PreviousOrder = new PreviousOrder();
   userMap: Map<string, User> = new Map();
   stunts: Stunt[] = [];
-  loading = true;
+  loadingUsers = true;
+  loadingStunts = false;
   activeStunt: Stunt | null = null;
   activeUser: User = new User;
   loggedIn?: boolean;
@@ -47,10 +48,10 @@ export class ParentComponent implements OnInit {
 
     this.configureLogin();
 
-    this.loading = false;
+    this.loadingUsers = false;
   }
 
-  initializePerformStunts(userList: User[]): User[] {
+  initializePerformStunts(userList: User[]): void {
     userList.forEach((user: User) => {
       user.performances = user.jsonPerforms ? JSON.parse(user.jsonPerforms) : [];
       user.score = 0;
@@ -61,11 +62,9 @@ export class ParentComponent implements OnInit {
         }
       });
     });
-
-    return userList
   }
 
-  transformUsersForScoreboard(userList: User[]): User[] {
+  transformUsersForScoreboard(userList: User[]): void {
     userList.sort((a, b) => b.score! - a.score! || a.abreviation.localeCompare(b.abreviation));
 
     let tiedPosition = 0;
@@ -87,12 +86,11 @@ export class ParentComponent implements OnInit {
       this.previousOrder.userList!.push({ id: user.id, firstName: user.firstName, abreviation: user.abreviation, position: user.position });
       this.userMap.set(user.id!, user);
     });
-    return userList;
   }
 
   configureLogin(): void {
     let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
-    
+
     if (!this.loggedIn) {
 
       if (creds !== undefined) {
@@ -136,10 +134,6 @@ export class ParentComponent implements OnInit {
 
       this.initializeActiveUser(credsString, creds[0]);
 
-      if (!this.loggedIn) {
-        this.loggedIn = false;
-        this.loginFail = true;
-      }
     } else {
       this.loggedIn = false;
       this.loginFail = true;
@@ -147,17 +141,26 @@ export class ParentComponent implements OnInit {
   }
 
   initializeActiveUser(credsString: string, firstname: string): void {
+    let foundUser = false;
+
     this.users.find((user: User) => {
       if (user.firstName.toLocaleLowerCase() === firstname.toLocaleLowerCase().trim()) {
         user.previousOrder = this.loggedIn ? this.activeUser.previousOrder : this.setPreviousOrder(user);
         this.loginFail = false;
+        user.loggedIn = true;
+        this.loggedIn = true;
+        this.activeUser = user;
         this.storedCreds = credsString;
         this.cookieService.set('_auth_cookie', credsString);
         this.initializeStunts(user);
-        user.loggedIn = true;
-        this.activeUser = user;        
+        foundUser = true;
       }
     });
+
+    if (!foundUser) {
+      this.loggedIn = false;
+      this.loginFail = true;
+    }
   }
 
   setPreviousOrder(user: User): PreviousOrder {
@@ -175,9 +178,10 @@ export class ParentComponent implements OnInit {
   }
 
   initializeStunts(user: User): void {
-    if (this.stunts.length === 0) {  
+    if (this.stunts.length === 0 && !this.loadingStunts) {
+      this.loadingStunts = true;
       this.firestoreService.getStunts().subscribe(stuntRes => {
-       stuntRes.docs.forEach(doc => {
+        stuntRes.docs.forEach(doc => {
           let stunt = <Stunt>doc.data();
           stunt.id = doc.id;
           stunt.completions = new Set();
@@ -188,15 +192,18 @@ export class ParentComponent implements OnInit {
         this.initializeActiveUserStunts(user);
       });
     } else {
-      this.stunts.forEach(stunt => {
-        stunt.completions = new Set();
-        stunt.deletedCompletions = new Set();
-      });
-      this.initializeActiveUserStunts(user);
-    }
+      if(!this.loadingStunts) {
+        this.stunts.forEach(stunt => {
+          stunt.completions = new Set();
+          stunt.deletedCompletions = new Set();
+        });
+        this.initializeActiveUserStunts(user);
+      }
+      }
   }
 
   initializeActiveUserStunts(user: User): void {
+
     this.stunts.sort((a, b) => a.name.localeCompare(b.name));
 
     user.performances?.forEach(performance => {
@@ -206,14 +213,14 @@ export class ParentComponent implements OnInit {
       } else {
         this.stunts.find(stunt => stunt.id === performance.stuntId)!.completions!.add(JSON.stringify(performance));
       }
-      
+
     });
 
     if (this.activeStunt !== null) {
       this.activeStunt = this.stunts.find(stunt => stunt.id === this.activeStunt!.id!)!
     }
 
-    this.loggedIn = true;
+    this.loadingStunts = false;
   }
 
   toggleStunt(stuntId: string): void {
@@ -225,9 +232,12 @@ export class ParentComponent implements OnInit {
     this.cookieService.delete('_auth_cookie', '/');
     this.storedCreds = undefined;
     this.loggedIn = false;
+    this.loginFail = false;
     this.activeUser = new User();
+    this.stunts = [];
+    this.loadingStunts = false;
 
-    if(id !== 'spectator') {
+    if (id !== 'spectator') {
       this.getData();
     }
   }
