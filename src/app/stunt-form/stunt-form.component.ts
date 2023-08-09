@@ -167,32 +167,48 @@ export class StuntFormComponent implements OnInit{
     return pointsValue !== 1 ? 'pts' : 'pt'
   }
 
-  deletePerformStunt(performance: PerformStunt, toDelete: boolean) {
+  deletePerformStunt(peformanceToUpdate: PerformStunt, toDelete: boolean) {
     if(toDelete || this.pastPerformances.length < this.activeStunt.maxUses) {
+      const willCauseOverwrite = !this.activeStunt.judgedEvent && peformanceToUpdate.points < this.activeStunt.points[this.activeStunt.points.length -1];
+
+      peformanceToUpdate.isDeleted = toDelete;
+
+      if(!toDelete && willCauseOverwrite) {
+        // will grab points at current peformances length since new peform stunt has not been added yet
+        peformanceToUpdate.points = this.activeStunt.points[this.pastPerformances.length];
+      }
+
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
-          performStunt: performance,
+          performStunt: peformanceToUpdate,
           toDelete: toDelete,
-          isTogglePerformStunt: true
+          isTogglePerformStunt: true,
+          willOverwriteOtherPerformances: willCauseOverwrite
         }
       });
-  
   
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           console.log('RESULT: ', result);
   
           if(toDelete) {
-            this.pastPerformances.forEach((performStunt: PerformStunt, index: number) => {
-              if(performStunt.timestamp === performance.timestamp ) {
-                performStunt.isDeleted = true;
+            this.pastPerformances.forEach((pastPerformStunt: PerformStunt, index: number) => {
+              if(pastPerformStunt.timestamp === peformanceToUpdate.timestamp ) {
+                pastPerformStunt.isDeleted = true;
                 this.pastPerformances.splice(index, 1);
-                this.deletedPerformances.push(performStunt);
+                this.deletedPerformances.push(pastPerformStunt);
+              }
+
+              if(willCauseOverwrite) {
+                if(pastPerformStunt.points > peformanceToUpdate.points) {
+                  let index = this.activeStunt.points.findIndex(pointValue => pointValue === pastPerformStunt.points);
+                  pastPerformStunt.points = this.activeStunt.points[index -1];
+                }
               }
             });
           } else {
             this.deletedPerformances.forEach((performStunt: PerformStunt, index: number)  => {
-              if(performStunt.timestamp === performance.timestamp) {
+              if(performStunt.timestamp === peformanceToUpdate.timestamp) {
                 performStunt.isDeleted = false;
                 this.deletedPerformances.splice(index, 1);
                 this.pastPerformances.push(performStunt);
@@ -202,7 +218,7 @@ export class StuntFormComponent implements OnInit{
   
           this.sortPerformanceLists();
   
-          this.activeUser.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
+          this.activeUser.performances = this.pastPerformances.concat(this.deletedPerformances);
   
           this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
         };
