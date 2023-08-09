@@ -44,20 +44,20 @@
               {{ performStunt.points + getPointStr(performStunt.points) }}
             </div>
             <div class="data">
-              Witness: {{ userMap.get(performStunt.witnessId)!.firstName }}
+              Witness: &nbsp;{{ getWitnessName(performStunt.witnessId) }}
             </div>
             <div class="data">
               {{ performStunt.description }}
             </div>
           </div>
 
-          <div *ngIf="!performStunt.isDeleted && !user.isSuspended && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, true)" class="action-icon">
+          <div *ngIf="!performStunt.isDeleted && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, true)" class="action-icon">
             <mat-icon>delete</mat-icon>
           </div>
     
-          <div *ngIf="performStunt.isDeleted && !user.isSuspended && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, false)" class="action-icon">
+          <!-- <div *ngIf="performStunt.isDeleted && !user.isSuspended && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, false)" class="action-icon">
             <mat-icon>settings_backup_restore</mat-icon>
-          </div>
+          </div> -->
 
         </div>
 

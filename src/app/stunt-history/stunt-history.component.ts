@@ -12,10 +12,9 @@ import { FirestoreService } from '../firestore.service';
 export class StuntHistoryComponent implements OnInit{
 
   @Input()
-  users: User[] = [];
+  userData: User[] = [];
 
-  @Input()
-  userMap: Map<string, User> = new Map();
+  users: User[] = [];
 
   @Input()
   activeUser: User = new User();
@@ -26,13 +25,19 @@ export class StuntHistoryComponent implements OnInit{
   constructor(public dialog: MatDialog, private firestoreService: FirestoreService) {}
 
   ngOnInit() {
+    this.users = this.userData.slice();
+
     this.isSuspended = this.users[0].isSuspended !== undefined ? this.users[0].isSuspended : false;
     this.areStuntsHidden = this.users[0].showHidden !== undefined ? !this.users[0].showHidden : true;
 
-    this.initializeData();
+    this.initializeData(false);
   }
 
-  initializeData(): void {
+  async initializeData(wait: boolean): Promise<void> {
+    if(wait) {
+      await new Promise(f => setTimeout(f, 2000));
+    }
+
     this.users.sort((a, b) => a.firstName.localeCompare(b.firstName));
     this.users.forEach(user => {
       user.performances!.sort((a, b) => a.stuntName!.localeCompare(b.stuntName!) || b.timestamp - a.timestamp);
@@ -41,6 +46,10 @@ export class StuntHistoryComponent implements OnInit{
 
   getPointStr(pointsValue: number): string {
     return pointsValue !== 1 ? 'pts' : 'pt'
+  }
+
+  getWitnessName(witnessId: string): string {
+    return this.users.find(u => u.id === witnessId)!.firstName;
   }
 
   toggleEventSuspension() {
@@ -60,7 +69,7 @@ export class StuntHistoryComponent implements OnInit{
 
       } else if (result1) {
 
-        await new Promise(f => setTimeout(f, 600));
+        await new Promise(f => setTimeout(f, 500));
 
         const dialogRef2 = this.dialog.open(ConfirmationDialogComponent, {
           data: {
@@ -85,6 +94,7 @@ export class StuntHistoryComponent implements OnInit{
   toggleUserSuspension(): void {
     this.users.forEach(user => this.firestoreService.updateUserSuspension(user.id!, !this.isSuspended));
     this.isSuspended = !this.isSuspended
+    this.initializeData(true);
   }
 
   toggleMysteryEvent(): void {
@@ -99,6 +109,7 @@ export class StuntHistoryComponent implements OnInit{
       if(result) {
         this.users.forEach(user => this.firestoreService.updateUserStuntsHidden(user.id!, this.areStuntsHidden));
         this.areStuntsHidden = !this.areStuntsHidden
+        this.initializeData(true);
       }
     });  
   }
@@ -115,9 +126,10 @@ export class StuntHistoryComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.users.find(user => user.id === userId)!.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
+        const userToUpdate = this.users.find(user => user.id === userId);
+        userToUpdate!.performances!.find(peformToUpdate => peformToUpdate.timestamp === performance.timestamp)!.isDeleted = toDelete;
 
-        this.firestoreService.updateUserStunts(userId, this.userMap.get(userId)!.performances!);
+        this.firestoreService.updateUserStunts(userId, userToUpdate!.performances!);
       };
     });  
   }

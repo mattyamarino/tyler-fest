@@ -13,7 +13,6 @@ export class ParentComponent implements OnInit {
 
   users: User[] = [];
   previousOrder: PreviousOrder = new PreviousOrder();
-  userMap: Map<string, User> = new Map();
   stunts: Stunt[] = [];
   loadingUsers = true;
   loadingStunts = false;
@@ -84,7 +83,6 @@ export class ParentComponent implements OnInit {
       }
 
       this.previousOrder.userList!.push({ id: user.id, firstName: user.firstName, abreviation: user.abreviation, position: user.position });
-      this.userMap.set(user.id!, user);
     });
   }
 
@@ -229,11 +227,13 @@ export class ParentComponent implements OnInit {
 
   logout(): void {
     const id = this.activeUser.id;
+    
     this.cookieService.delete('_auth_cookie', '/');
     this.storedCreds = undefined;
     this.loggedIn = false;
     this.loginFail = false;
     this.activeUser = new User();
+    this.activeStunt = null;
     this.stunts = [];
     this.loadingStunts = false;
 

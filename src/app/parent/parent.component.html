@@ -20,15 +20,14 @@
             <app-stunt-form (stuntEvent)="toggleStunt($event.id!)" 
             [activeStunt]="activeStunt" 
             [activeUser]="activeUser"
-            [userMap]="userMap"
+            [witnesses]="users"
             #stuntForm>
           </app-stunt-form>
           </div>
           <div class="component-container" *ngIf="loggedIn && (activeUser.id === 'admin' || activeUser.id === 'spectator')">
             <app-stunt-history 
             [activeUser]="activeUser"
-            [users]="users"
-            [userMap]="userMap">
+            [userData]="users">
           </app-stunt-history>
           </div>
         </mat-grid-tile>

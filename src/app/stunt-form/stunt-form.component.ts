@@ -21,10 +21,8 @@ export class StuntFormComponent implements OnInit{
   @Input()
   activeUser: User = new User();
 
-  witnesses: User[] = [];
-
   @Input()
-  userMap: Map<string, User> = new Map();
+  witnesses: User[] = [];
 
   @Output() 
   stuntEvent = new EventEmitter<Stunt>();
@@ -66,7 +64,7 @@ export class StuntFormComponent implements OnInit{
   }
 
   initializeUserNames(): void {
-    this.witnesses = Array.from(this.userMap.values()).filter(user => user.id !== this.activeUser.id);
+    this.witnesses = this.witnesses.filter(user => user.id !== this.activeUser.id);
     this.witnesses.sort((a, b) => a.firstName.localeCompare(b.firstName));
   }
 
@@ -84,6 +82,10 @@ export class StuntFormComponent implements OnInit{
   sortPerformanceLists(): void {
     this.pastPerformances.sort((a, b) => b.timestamp - a.timestamp);
     this.deletedPerformances.sort((a, b) => b.timestamp - a.timestamp);
+  }
+
+  getWitnessName(witnessId: string): string {
+    return this.witnesses.find(u => u.id === witnessId)!.firstName;
   }
 
   closeStunt(): void {
@@ -174,7 +176,7 @@ export class StuntFormComponent implements OnInit{
       peformanceToUpdate.isDeleted = toDelete;
 
       if(!toDelete && willCauseOverwrite) {
-        // will grab points at current peformances length since new peform stunt has not been added yet
+        // resets points to next open slot. will grab points at current peformances length since new peform stunt has not been added yet
         peformanceToUpdate.points = this.activeStunt.points[this.pastPerformances.length];
       }
 
@@ -183,7 +185,6 @@ export class StuntFormComponent implements OnInit{
           performStunt: peformanceToUpdate,
           toDelete: toDelete,
           isTogglePerformStunt: true,
-          willOverwriteOtherPerformances: willCauseOverwrite
         }
       });
   

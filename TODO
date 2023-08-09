@@ -2,9 +2,8 @@
 add error handling for firestore requests
 add more secure auth
 secure firestore to only accept requests from ui
-
-disable restore button in admin page if stunt at max uses
-bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
+admin can cause points discrepency by deleting early event in variable point stunt (ex beer pong) allowing more than 3 total points
+  - create admin table with object that has variable point entries to fix this issue.
 
 
 ********** DONE **********
@@ -34,3 +33,6 @@ add specific snackbar messages?
 dont make new calls if spectator logs out
 show number of positions changed
 only pull stunts when user logs in
+bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
+disable restore button in admin page if stunt at max uses
+remove usermap
