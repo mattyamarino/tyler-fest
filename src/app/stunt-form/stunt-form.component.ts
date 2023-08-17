@@ -13,7 +13,7 @@ import { FirestoreService } from '../firestore.service';
   templateUrl: './stunt-form.component.html',
   styleUrls: ['./stunt-form.component.css']
 })
-export class StuntFormComponent implements OnInit{
+export class StuntFormComponent implements OnInit {
 
   @Input()
   activeStunt: Stunt = new Stunt();
@@ -24,7 +24,7 @@ export class StuntFormComponent implements OnInit{
   @Input()
   witnesses: User[] = [];
 
-  @Output() 
+  @Output()
   stuntEvent = new EventEmitter<Stunt>();
 
   stuntForm = new FormGroup({
@@ -36,12 +36,12 @@ export class StuntFormComponent implements OnInit{
   saving = false;
 
   pastPerformances: PerformStunt[] = [];
-  deletedPerformances: PerformStunt[] =[];
+  deletedPerformances: PerformStunt[] = [];
 
   points: number = 0;
   judgedPoints: number[] = [];
 
-  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar, private firestoreService: FirestoreService) {}
+  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar, private firestoreService: FirestoreService) { }
 
   ngOnInit(): void {
     this.initializePoints();
@@ -54,9 +54,9 @@ export class StuntFormComponent implements OnInit{
 
     this.points = this.activeStunt.points[index];
 
-    if(this.activeStunt.judgedEvent) {
+    if (this.activeStunt.judgedEvent) {
       let counter = this.activeStunt.points[0];
-      while(counter <= this.activeStunt.points[1]) {
+      while (counter <= this.activeStunt.points[1]) {
         this.judgedPoints.push(counter);
         counter++;
       }
@@ -72,7 +72,7 @@ export class StuntFormComponent implements OnInit{
     this.activeStunt.completions!.forEach(jsonPerform => {
       this.pastPerformances.push(JSON.parse(jsonPerform));
     });
-    
+
     this.activeStunt.deletedCompletions!.forEach(deleteJsonPerform => {
       this.deletedPerformances.push(JSON.parse(deleteJsonPerform));
     });
@@ -104,11 +104,11 @@ export class StuntFormComponent implements OnInit{
   isDisabled(): boolean {
     let judgedPointsInvalid = this.activeStunt.judgedEvent ? this.stuntForm.get('points')?.value === 0 : false
 
-    return this.stuntForm.get('witness')?.value === '' || this.stuntForm.get('description')?.value === ''  || judgedPointsInvalid ? true : false;
+    return this.stuntForm.get('witness')?.value === '' || this.stuntForm.get('description')?.value === '' || judgedPointsInvalid ? true : false;
   }
 
   showStunt(): boolean {
-    if(this.activeStunt.isHidden) {
+    if (this.activeStunt.isHidden) {
       return this.activeUser.showHidden ? true : false;
     }
 
@@ -116,7 +116,7 @@ export class StuntFormComponent implements OnInit{
   }
 
   onSubmit() {
-    if(!this.saving) {
+    if (!this.saving) {
       this.saving = true;
       const pointsToSave = this.activeStunt.judgedEvent ? this.stuntForm.get('points')!.value! : this.points;
 
@@ -145,7 +145,7 @@ export class StuntFormComponent implements OnInit{
           stuntMessages: this.activeStunt.messages,
           stuntCompletions: this.pastPerformances.length,
           stuntPoints: pointsToSave,
-          hasDeletedPerforms: this.deletedPerformances.length > 0 ? true :false
+          hasDeletedPerforms: this.deletedPerformances.length > 0 ? true : false
         }
       });
 
@@ -157,29 +157,20 @@ export class StuntFormComponent implements OnInit{
     return this.witnesses.find(user => user.firstName === name)!.id!
   }
 
-  isActivePoints(index: number): boolean  {
+  isActivePoints(index: number): boolean {
     return (this.activeStunt.completions!.size) === index
   }
 
-  getPointStr(pointsValue: number , isForJudgedEvent?: boolean): string {
-    if(isForJudgedEvent) {
-      return `${this.judgedPoints[0]}-${this.judgedPoints[this.judgedPoints.length -1]}pts`
+  getPointStr(pointsValue: number, isForJudgedEvent?: boolean): string {
+    if (isForJudgedEvent) {
+      return `${this.judgedPoints[0]}-${this.judgedPoints[this.judgedPoints.length - 1]}pts`
     }
 
     return pointsValue !== 1 ? 'pts' : 'pt'
   }
 
   deletePerformStunt(peformanceToUpdate: PerformStunt, toDelete: boolean) {
-    if(toDelete || this.pastPerformances.length < this.activeStunt.maxUses) {
-      const willCauseOverwrite = !this.activeStunt.judgedEvent && peformanceToUpdate.points < this.activeStunt.points[this.activeStunt.points.length -1];
-
-      peformanceToUpdate.isDeleted = toDelete;
-
-      if(!toDelete && willCauseOverwrite) {
-        // resets points to next open slot. will grab points at current peformances length since new peform stunt has not been added yet
-        peformanceToUpdate.points = this.activeStunt.points[this.pastPerformances.length];
-      }
-
+    if (toDelete || this.pastPerformances.length < this.activeStunt.maxUses) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           performStunt: peformanceToUpdate,
@@ -187,43 +178,50 @@ export class StuntFormComponent implements OnInit{
           isTogglePerformStunt: true,
         }
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
-        if(result) {
-          console.log('RESULT: ', result);
-  
-          if(toDelete) {
+        if (result) {
+          const willCauseOverwrite = !this.activeStunt.judgedEvent && peformanceToUpdate.points < this.activeStunt.points[this.activeStunt.points.length - 1];
+
+          peformanceToUpdate.isDeleted = toDelete;
+
+          if (!toDelete && willCauseOverwrite) {
+            // resets points to next open slot. will grab points at current peformances length since new peform stunt has not been added yet
+            peformanceToUpdate.points = this.activeStunt.points[this.pastPerformances.length];
+          }
+
+          if (toDelete) {
             this.pastPerformances.forEach((pastPerformStunt: PerformStunt, index: number) => {
-              if(pastPerformStunt.timestamp === peformanceToUpdate.timestamp ) {
+              if (pastPerformStunt.timestamp === peformanceToUpdate.timestamp) {
                 pastPerformStunt.isDeleted = true;
                 this.pastPerformances.splice(index, 1);
                 this.deletedPerformances.push(pastPerformStunt);
               }
 
-              if(willCauseOverwrite) {
-                if(pastPerformStunt.points > peformanceToUpdate.points) {
-                  let index = this.activeStunt.points.findIndex(pointValue => pointValue === pastPerformStunt.points);
-                  pastPerformStunt.points = this.activeStunt.points[index -1];
+              if (willCauseOverwrite) {
+                if (pastPerformStunt.points > peformanceToUpdate.points) {
+                  let pointIndex = this.activeStunt.points.findIndex(pointValue => pointValue === pastPerformStunt.points);
+                  pastPerformStunt.points = this.activeStunt.points[pointIndex - 1];
                 }
               }
             });
           } else {
-            this.deletedPerformances.forEach((performStunt: PerformStunt, index: number)  => {
-              if(performStunt.timestamp === peformanceToUpdate.timestamp) {
+            this.deletedPerformances.forEach((performStunt: PerformStunt, index: number) => {
+              if (performStunt.timestamp === peformanceToUpdate.timestamp) {
                 performStunt.isDeleted = false;
                 this.deletedPerformances.splice(index, 1);
                 this.pastPerformances.push(performStunt);
               }
             });
           }
-  
+
           this.sortPerformanceLists();
-  
+
           this.activeUser.performances = this.pastPerformances.concat(this.deletedPerformances);
-  
+
           this.firestoreService.updateUserStunts(this.activeUser.id!, this.activeUser.performances!);
         };
-      });  
+      });
     }
   }
 }

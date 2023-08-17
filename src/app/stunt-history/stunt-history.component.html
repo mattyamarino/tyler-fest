@@ -51,7 +51,9 @@
             </div>
           </div>
 
-          <div *ngIf="!performStunt.isDeleted && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, true)" class="action-icon">
+          <div *ngIf="!performStunt.isDeleted && activeUser.id === 'admin' && performStunt.stuntName !== 'Beer Pong' && performStunt.stuntName !== 'Flip Cup'"  
+          (click)="deletePerformStunt(user.id!, performStunt, true)" 
+          class="action-icon">
             <mat-icon>delete</mat-icon>
           </div>
     

@@ -37,6 +37,7 @@ export class Stunt {
   deletedCompletions?: Set<string>
   isHidden?: boolean;
   messages?: SnackbarMessage[];
+  secretRoleStunt?: boolean;
 }
 
 

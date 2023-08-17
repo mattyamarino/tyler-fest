@@ -24,10 +24,11 @@
             #stuntForm>
           </app-stunt-form>
           </div>
-          <div class="component-container" *ngIf="loggedIn && (activeUser.id === 'admin' || activeUser.id === 'spectator')">
+          <div class="component-container" *ngIf="loggedIn && (activeUser.id === 'admin' || activeUser.id === 'spectator') && !loadingStunts">
             <app-stunt-history 
             [activeUser]="activeUser"
             [userData]="users">
+            [stunts]="stunts">
           </app-stunt-history>
           </div>
         </mat-grid-tile>

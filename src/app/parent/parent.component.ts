@@ -28,17 +28,19 @@ export class ParentComponent implements OnInit {
 
   ngOnInit(): void {
     // this.oneTimeUploadService.onetimeDataUpload();
-    this.getData();
+    this.getUserData();
   }
 
-  getData(): void {
+
+  // ***************************BEGIN POPULATE USER FUNCTIONS***************************
+  getUserData(): void {
     this.firestoreService.getUsers().subscribe(async userRes => {
       let unformattedUsers = <User[]>userRes;
-      this.initializeData(unformattedUsers);
+      this.initializeUserData(unformattedUsers);
     });
   }
 
-  initializeData(unformattedUsers: User[]): void {
+  initializeUserData(unformattedUsers: User[]): void {
     this.previousOrder = new PreviousOrder();
     this.initializePerformStunts(unformattedUsers);
     this.transformUsersForScoreboard(unformattedUsers);
@@ -86,6 +88,10 @@ export class ParentComponent implements OnInit {
     });
   }
 
+
+  // ***************************BEGIN AUTH FUNCTIONS***************************
+
+
   configureLogin(): void {
     let creds = this.getCookie('_auth_cookie') !== undefined ? this.getCookie('_auth_cookie') : this.storedCreds;
 
@@ -122,11 +128,11 @@ export class ParentComponent implements OnInit {
       this.storedCreds = credsString;
 
     } else if (creds[0].toLocaleLowerCase().trim() === 'admin' && creds[1].trim() === this.adminKey) {
-      this.loggedIn = true;
       this.loginFail = false;
       this.activeUser.id = 'admin';
       this.cookieService.set('_auth_cookie', credsString);
       this.storedCreds = credsString;
+      this.initializeStunts();
 
     } else if (creds[1].trim() === this.key) {
 
@@ -137,6 +143,10 @@ export class ParentComponent implements OnInit {
       this.loginFail = true;
     }
   }
+  
+
+  // ***************************BEGIN POPULATE ACTIVE USER FUNCTIONS***************************
+
 
   initializeActiveUser(credsString: string, firstname: string): void {
     let foundUser = false;
@@ -175,7 +185,9 @@ export class ParentComponent implements OnInit {
     return prevOrder.timestamp === undefined ? this.previousOrder : prevOrder;
   }
 
-  initializeStunts(user: User): void {
+  // ***************************BEGIN POPULATE STUNTS FUNCTIONS***************************
+
+  initializeStunts(user?: User): void {
     if (this.stunts.length === 0 && !this.loadingStunts) {
       this.loadingStunts = true;
       this.firestoreService.getStunts().subscribe(stuntRes => {
@@ -187,17 +199,27 @@ export class ParentComponent implements OnInit {
           this.stunts.push(stunt);
         });
 
-        this.initializeActiveUserStunts(user);
+        if (user !== undefined) {
+          this.initializeActiveUserStunts(user);
+        } else {
+          this.loggedIn = true;
+          this.loadingStunts = false;
+        }
       });
     } else {
-      if(!this.loadingStunts) {
+      if (!this.loadingStunts) {
         this.stunts.forEach(stunt => {
           stunt.completions = new Set();
           stunt.deletedCompletions = new Set();
         });
-        this.initializeActiveUserStunts(user);
+        if (user !== undefined) {
+          this.initializeActiveUserStunts(user);
+        } else {
+          this.loggedIn = true;
+          this.loadingStunts = false;
+        }
       }
-      }
+    }
   }
 
   initializeActiveUserStunts(user: User): void {
@@ -221,13 +243,16 @@ export class ParentComponent implements OnInit {
     this.loadingStunts = false;
   }
 
+  // ***************************BEGIN OTHER FUNCTIONS***************************
+
+
   toggleStunt(stuntId: string): void {
     this.activeStunt = this.activeStunt === null ? this.stunts.find(stunt => stunt.id === stuntId)! : null;
   }
 
   logout(): void {
     const id = this.activeUser.id;
-    
+
     this.cookieService.delete('_auth_cookie', '/');
     this.storedCreds = undefined;
     this.loggedIn = false;
@@ -238,7 +263,7 @@ export class ParentComponent implements OnInit {
     this.loadingStunts = false;
 
     if (id !== 'spectator') {
-      this.getData();
+      this.getUserData();
     }
   }
 

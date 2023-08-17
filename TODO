@@ -2,8 +2,20 @@
 add error handling for firestore requests
 add more secure auth
 secure firestore to only accept requests from ui
-admin can cause points discrepency by deleting early event in variable point stunt (ex beer pong) allowing more than 3 total points
-  - create admin table with object that has variable point entries to fix this issue.
+revert history page to update in real time?
+
+
+********** WISHLIST **********
+Hide ice stunt visable to all, only to be used by the iceman, will not appear in score until end, only visible in admin history
+-Hide Ices - 1pt - 3 uses
+
+Pickle - 3 pts - 1use
+
+doing your damn job - hidden until end - (-5 - 2pts) - 1 use  (negative points are for cheating)
+
+ADD YOGA - 1-3pts
+
+ADD STACK CUP
 
 
 ********** DONE **********
@@ -36,3 +48,5 @@ only pull stunts when user logs in
 bug where user deletes perform stunt with variable points.  user can game system to get max value points for all attempts.
 disable restore button in admin page if stunt at max uses
 remove usermap
+bug where activeStunt not cleared on logout
+admin can cause points discrepency by deleting early event in variable point stunt (ex beer pong) allowing more than 3 total points

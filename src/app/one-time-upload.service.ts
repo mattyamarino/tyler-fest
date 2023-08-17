@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
-import { User } from './models/models';
+import { Stunt, User } from './models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +64,15 @@ export class OneTimeUploadService {
         message: 'I feel like you deserve more points for that, like maybe an extra 20 Tucker points'
       },
       {
+        message: 'You should be insecure with how secure your position is in this game'
+      },
+      {
+        message: 'People might call you \'Toddler Tucker\' but after that win, their the ones cleaning up your shit'
+      },
+      {
+        message: 'Right now, you are as hot as your cousin'
+      },
+      {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
         showOnlyIfDeletedSubmissions: true
       },
@@ -74,6 +83,21 @@ export class OneTimeUploadService {
     firstName: 'Carlos',
     abreviation: 'LOS',    
     messages: [
+      {
+        message: 'You made Monterrey proud'
+      },
+      {
+        message: 'Congratulations you just earned one free blowjob from Mel (per Tyler)'
+      },
+      {
+        message: 'Good job, Marcelo just shit his pants'
+      },
+      {
+        message: 'This moment is as good a moment as a bag of chips with a dollop of sour cream and hot sauce'
+      },
+      {
+        message: 'Landman? more like Lord of the Land'
+      },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
         showOnlyIfDeletedSubmissions: true
@@ -89,7 +113,16 @@ export class OneTimeUploadService {
         message: 'I believe that was what was called a pro gamer move'
       },
       {
-        message: 'That was great, not as great as your drives at Top Golf, but still great'
+        message: 'Craig the keg, my best friend, with big muscles and lots of homies'
+      },
+      {
+        message: 'After that invite as many prostitues as you want, but dont tell Ryne'
+      },
+      {
+        message: 'Show Gordon those nipples'
+      },
+      {
+        message: 'You might have broken your back, but point wise, you are in the front'
       },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
@@ -104,6 +137,15 @@ export class OneTimeUploadService {
     messages: [
       {
         message: 'Paige would be so proud right now'
+      },
+      {
+        message: 'You might be from Elgin, but your balls are Elginormous'
+      },
+      {
+        message: 'Keep Going Bitch'
+      },
+      {
+        message: 'You should text Paige, because after that win she probably wants to make out'
       },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
@@ -123,6 +165,12 @@ export class OneTimeUploadService {
         message: 'I like to think of you as the George Russell of this competition, take that how you will.'
       },
       {
+        message: 'That was cool, but not as cool as your dad'
+      },
+      {
+        message: 'Sending away Derek Carr for Jimmy G is like selling a Honda Accord so you can buy a Toyota Camry, but you know good job'
+      },
+      {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
         showOnlyIfDeletedSubmissions: true
       },
@@ -132,7 +180,19 @@ export class OneTimeUploadService {
   hardcodedUser8: User = {
     firstName: 'Ryne',
     abreviation: 'RYN',
-    messages: [
+    messages: [  
+      {
+        message: 'The Admiral is certainly proud of that one'
+      },
+      {
+        message: 'The Cold Beer Bandit Strikes Again!'
+      },
+      {
+        message: 'Reed might be a bitch, but you arent'
+      },
+      {
+        message: 'Fuck the noise, keep your head in the game'
+      },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
         showOnlyIfDeletedSubmissions: true
@@ -145,7 +205,19 @@ export class OneTimeUploadService {
     abreviation: 'SMR',
     messages: [
       {
-        message: ''
+        message: 'Welcome to the family, you handsome motherfucker'
+      },
+      {
+        message: 'Jessie may want third base, but you just hit a home run'
+      },
+      {
+        message: 'That was as good as leftovers in a fridge for Rhone'
+      },
+      {
+        message: 'You have tits on you, I\'ll give you that'
+      },
+      {
+        message: 'That was better than blacking out in New Orleans'
       },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
@@ -157,9 +229,21 @@ export class OneTimeUploadService {
   hardcodedUser10: User = {
     firstName: 'Colin',
     abreviation: 'COL',
-    messages: [
+    messages: [ 
       {
-        message: 'The ride down was amazing right?  I mean so many great stories, I totally didnt write this message before the trip...'
+        message: 'You had hope during that stunt, but later Faith wil be the one tickling your balls'
+      },
+      {
+        message: 'Kaz might take big shits, but that... was the shit'
+      },
+      {
+        message: 'Heistand\'s a bitch and we both know it'
+      },
+      {
+        message: 'Shots fired, and I dont mean into a 7-11 celing'
+      },
+      {
+        message: 'Cool, lets wrap some houses and run from the cops to celebrate'
       },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
@@ -172,6 +256,21 @@ export class OneTimeUploadService {
     firstName: 'Mouser',
     abreviation: 'MSR',
     messages: [
+      {
+        message: 'Where in the fuck is Drew Abata?'
+      },
+      {
+        message: 'That one was for Taylor'
+      },
+      {
+        message: 'That shit right there... Mojo\'s tail is wagging hard'
+      },
+      {
+        message: 'You were a Treasurer, but you were the real treaure'
+      },
+      {
+        message: 'Shelby def wants to gobble that cock now (per Tyler)'
+      },
       {
         message: 'You are doing great, aside from that time you tried this stunt and it didnt count.  But otherwise, you are killing it',
         showOnlyIfDeletedSubmissions: true
@@ -190,15 +289,15 @@ export class OneTimeUploadService {
     ]
   }
 
-  hardcodedStunt1 = {
+  hardcodedStunt1: Stunt = {
     name: 'Buy A Stranger A Drink',
-    rules: 'it has to be for someone you have never met',
+    rules: 'Should be bought for the person(s) you know the least.  Must give a toast about the person you bought a drink for. Both submissions cant be completed at the same time.',
     maxUses: 2,
     points: [1],
     icon: 'cocktail',
   }
 
-  hardcodedStunt2 = {
+  hardcodedStunt2: Stunt = {
     name: 'Catch A Fish',
     rules: '',
     maxUses: 2,
@@ -206,7 +305,7 @@ export class OneTimeUploadService {
     icon: 'fish'
   }
 
-  hardcodedStunt3 = {
+  hardcodedStunt3: Stunt = {
     name: 'Give A Speech',
     rules: 'Talk for two minutes on a topic picked from the box.  Enter judges score below',
     maxUses: 1,
@@ -229,19 +328,20 @@ export class OneTimeUploadService {
     ]
   }
 
-  hardcodedStunt4 = {
+  hardcodedStunt4: Stunt = {
     name: 'Karokee',
-    rules: 'sing a song',
+    rules: 'Sing a song',
     maxUses: 1,
-    points: [1],
+    points: [2],
     icon: 'mic'
   }
 
-  hardcodedStunt5 = {
+  hardcodedStunt5: Stunt = {
     name: 'Spin The Wheel',
-    rules: 'get points if you succeed at the task randomly chosen',
-    maxUses: 1,
-    points: [2],
+    rules: 'Get points if you succeed at the task randomly chosen, enter the points Lord Tyler Tells you after you complete the tsk',
+    maxUses: 3,
+    points: [0,3],
+    judgedEvent: true,
     icon: 'spinner',
     messages: [
       {
@@ -251,9 +351,9 @@ export class OneTimeUploadService {
     ]
   }
 
-  hardcodedStunt6 = {
+  hardcodedStunt6: Stunt = {
     name: 'Beer Pong',
-    rules: 'check the first box if you win, the second if you get back to back wins, and the third if you can pull off three in a row',
+    rules: 'Check the first box if you win, the second if you get back to back wins, and the third if you can pull off three in a row. Can be done with a teammate or solo. You cannot play with the same partner or oponents twice in a row.',
     maxUses: 3,
     points: [1, 2, 3],
     icon: 'beer-pong-_1_',
@@ -265,17 +365,17 @@ export class OneTimeUploadService {
     ]
   }
 
-  hardcodedStunt7 = {
+  hardcodedStunt7: Stunt = {
     name: 'Quarters',
-    rules: 'check the first box if you win, the second if you get back to back wins, and the third if you can pull off three in a row',
+    rules: 'Check the first box if you win, the second if you get back to back wins, and the third if you can pull off three in a row',
     maxUses: 3,
     points: [1, 2, 3],
     icon: 'coin'
   }
 
-  hardcodedStunt8 = {
+  hardcodedStunt8: Stunt = {
     name: 'Flip Cup',
-    rules: 'check the first box if you win, the second if you get back to back wins, and the third if you can pull off three in a row',
+    rules: 'Check the first box if you win, the second if you get back to back wins, and the third if you can pull off three in a row. Compete as a team of 3, you cant have the same team two games in a row',
     maxUses: 3,
     points: [1, 2, 3],
     icon: 'paper-cup',
@@ -291,7 +391,7 @@ export class OneTimeUploadService {
     ]
   }
 
-  hardcodedStunt9 = {
+  hardcodedStunt9: Stunt = {
     name: 'Gambling',
     rules: 'Finish top 3 at gambling night.  First gets: 3pts, Second: 2pts, Third: 1pt',
     maxUses: 1,
@@ -314,24 +414,113 @@ export class OneTimeUploadService {
     ]
   }
 
-  hardcodedStunt10 = {
+  hardcodedStunt10: Stunt = {
     name: 'WTF',
     rules: 'when the time is right, you will know',
     maxUses: 2,
-    points: [2],
+    points: [-1, 1],
+    judgedEvent: true,
     icon: 'shrug',
     isHidden: true,
     messages: [
       {
-        message: 'You got them both!?  I still have no idea what this thing is, but you managed to complete it twice, so thats probably impressive',
+        message: 'Well its over, finally, forever, done',
         showOnlyIfSubmissionNumber: 2
       }
     ]
   }
 
-  hardcodedUsers = [this.hardcodedUser1, this.hardcodedUser2, this.hardcodedUser3, this.hardcodedUser4, this.hardcodedUser5, this.hardcodedUser6, this.hardcodedUser7, this.hardcodedUser8, this.hardcodedUser9, this.hardcodedUser10, this.hardcodedUser11, this.hardcodedUser12];
+  hardcodedStunt11: Stunt = {
+    name: 'Stack Cup',
+    rules: 'Just ask Tyler how this one works.  Loser HAS to mark a submission at -1pt, everyone else that played gets 1pt',
+    maxUses: 3,
+    judgedEvent: true,
+    points: [-1, 1],
+    icon: 'stack',
+    messages: [
+      {
+        message: 'Whelp, that didnt go great',
+        showOnlyIfPointsMatch: -1
+      }
+    ]
+  }
 
-  hardcodedStunts = [this.hardcodedStunt1, this.hardcodedStunt2, this.hardcodedStunt3, this.hardcodedStunt4, this.hardcodedStunt5, this.hardcodedStunt6, this.hardcodedStunt7, this.hardcodedStunt8, this.hardcodedStunt9, this.hardcodedStunt10];
+  hardcodedStunt12: Stunt = {
+    name: 'Yoga',
+    rules: 'Just make it through Craig\'s yoga class and you get 1pt.  Craig you will get pts based on your instruction',
+    maxUses: 1,
+    points: [1, 3],
+    icon: 'yoga',
+    judgedEvent: true,
+    messages: [
+      {
+        message: 'Highway robbery, I would file an appeal',
+        showOnlyIfPointsMatch: 2
+      },
+      {
+        message: 'Nice man, you could probably open your own Yoga studio',
+        showOnlyIfPointsMatch: 3
+      },
+    ]
+  }
+
+  hardcodedStunt13: Stunt = {
+    name: 'Hide an Ice',
+    rules: 'The rules are on your card.  IMPORTANT: points for this are hidden until the end of the weekend, and submissions wont appear in the spectator view either (to aid you in your secret mission).   Also only you can see this stunt, so dont share your screen!',
+    maxUses: 3,
+    points: [1],
+    icon: 'ice',
+    secretRoleStunt: true,
+    messages: [
+      {
+        message: 'Alright Everyone! Chill',
+        showOnlyIfSubmissionNumber: 1
+      },
+      {
+        message: 'Let\'s Kick Some Ice',
+        showOnlyIfSubmissionNumber: 2
+      },
+      {
+        message: 'What Killed The Dinosaurs? The Ice Age',
+        showOnlyIfSubmissionNumber: 3
+      }
+    ]
+  }
+
+  hardcodedStunt14: Stunt = {
+    name: 'Pickle',
+    rules: 'The rules are on your card.  IMPORTANT: points for this are hidden until the end of the weekend, and submissions wont appear in the spectator view either (to aid you in your secret mission).   Also only you can see this stunt, so dont share your screen!',
+    maxUses: 3,
+    points: [1],
+    icon: 'pickle',
+    secretRoleStunt: true,
+    messages: [
+      {
+        message: 'Quite the pickle youve gotten us into',
+        showOnlyIfSubmissionNumber: 1
+      }
+    ]
+  }
+
+  hardcodedStunt15: Stunt = {
+    name: 'Do Your Damn Job',
+    rules: 'If you arent havent already gotten points for your role mark 2pts.  If you got busted cheating... well ask Tyler',
+    maxUses: 1,
+    points: [-5,2],
+    icon: 'job',
+    secretRoleStunt: true,
+    judgedEvent: true,
+    messages: [
+      {
+        message: 'Get rekt nub',
+        showOnlyIfPointsMatch: -5
+      }
+    ]
+  }
+
+  hardcodedUsers = [this.hardcodedUser1, this.hardcodedUser2, this.hardcodedUser3, this.hardcodedUser4, this.hardcodedUser5, this.hardcodedUser6, this.hardcodedUser7, this.hardcodedUser8, this.hardcodedUser9, this.hardcodedUser10, this.hardcodedUser11];
+
+  hardcodedStunts = [this.hardcodedStunt1, this.hardcodedStunt2, this.hardcodedStunt3, this.hardcodedStunt4, this.hardcodedStunt5, this.hardcodedStunt6, this.hardcodedStunt8, this.hardcodedStunt9, this.hardcodedStunt10, this.hardcodedStunt11, this.hardcodedStunt12, this.hardcodedStunt13, this.hardcodedStunt14, this.hardcodedStunt15];
 
 
 }
