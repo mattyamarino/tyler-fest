@@ -3,6 +3,7 @@ import { PerformStunt, Stunt, User } from '../models/models';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { FirestoreService } from '../firestore.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-stunt-history',
@@ -18,12 +19,22 @@ export class StuntHistoryComponent implements OnInit {
 
   @Input()
   activeUser: User = new User();
-
+  
   @Input()
   stunts: Stunt[] = [];
 
+  iceMan = new FormControl('');
+  pickleMan = new FormControl('');
+
+  existingIceMan!: string;
+  existingPickleMan!: string;
+
   isSuspended!: boolean;
   areStuntsHidden!: boolean;
+
+  jobStuntName = 'Do Your Damn Job';
+  iceName = 'Hide an Ice';
+  pickleName = 'Pickle'
 
   constructor(public dialog: MatDialog, private firestoreService: FirestoreService) { }
 
@@ -39,6 +50,19 @@ export class StuntHistoryComponent implements OnInit {
   initializeData(): void {
     this.users.sort((a, b) => a.firstName.localeCompare(b.firstName));
     this.users.forEach(user => {
+      user.secretRoles?.forEach(stuntName => {
+
+        if(stuntName === this.iceName) {
+          this.iceMan.setValue(user.id!);
+          this.existingIceMan = user.firstName;
+        }
+
+        if(stuntName === this.pickleName) {
+          this.pickleMan.setValue(user.id!);
+          this.existingPickleMan = user.firstName;
+        }
+
+      });
       user.performances!.sort((a, b) => a.stuntName!.localeCompare(b.stuntName!) || b.timestamp - a.timestamp);
     });
   }
@@ -49,6 +73,89 @@ export class StuntHistoryComponent implements OnInit {
 
   getWitnessName(witnessId: string): string {
     return this.users.find(u => u.id === witnessId)!.firstName;
+  }
+
+  hideSecretRoleButton(stuntName: string) {
+    if(stuntName === this.iceName) {
+      if(!this.iceMan.value) {
+        return true;
+      }
+      
+      return this.existingIceMan ? this.getWitnessName(this.iceMan.value) === this.existingIceMan : false;
+    }
+
+    if(stuntName === this.pickleName) {
+      if(!this.pickleMan.value) {
+        return true;
+      }
+      
+      return this.existingPickleMan ? this.getWitnessName(this.pickleMan.value) === this.existingPickleMan : false;
+    }
+
+    return false;
+  }
+  
+
+  updateIceMan(stuntName: string) {
+    if(stuntName === this.iceName && this.iceMan.value) {
+
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          isToggleSecretRole: true,
+          secretStuntName: this.iceName,
+          newRoleHolder: this.getWitnessName(this.iceMan.value),
+          existingRoleHolder: this.existingIceMan
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(async result => {
+        if (result) {
+          if(this.existingIceMan) {
+            const userToRemoveRole = this.users.find(u => u.firstName === this.existingIceMan);
+            let UTRSecretRoles = userToRemoveRole!.secretRoles === undefined ? [] : userToRemoveRole!.secretRoles;
+            UTRSecretRoles = UTRSecretRoles.filter(stuntName => stuntName !== this.iceName);
+            this.firestoreService.updateUserSecretRoles(userToRemoveRole!.id!, UTRSecretRoles);
+          } 
+
+          const userToAddRole = this.users.find(u => u.id === this.iceMan.value);
+          const UTASecretRoles = userToAddRole!.secretRoles === undefined ? [] : userToAddRole!.secretRoles;
+          UTASecretRoles.push(this.iceName);
+          this.firestoreService.updateUserSecretRoles(userToAddRole!.id!, UTASecretRoles);
+          this.existingIceMan = userToAddRole!.firstName;
+        }
+      });
+    }
+  }
+
+  updatePickleMan(stuntName: string) {
+    if(stuntName === this.pickleName && this.pickleMan.value) {
+
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          isToggleSecretRole: true,
+          secretStuntName: this.pickleName,
+          newRoleHolder: this.getWitnessName(this.pickleMan.value),
+          existingRoleHolder: this.existingPickleMan
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(async result => {
+        if (result) {
+          if(this.existingPickleMan) {
+            const userToRemoveRole = this.users.find(u => u.firstName === this.existingPickleMan);
+            let UTRSecretRoles = userToRemoveRole!.secretRoles === undefined ? [] : userToRemoveRole!.secretRoles;
+            UTRSecretRoles = UTRSecretRoles.filter(stuntName => stuntName !== this.pickleName);
+            this.firestoreService.updateUserSecretRoles(userToRemoveRole!.id!, UTRSecretRoles);
+          } 
+
+          const userToAddRole = this.users.find(u => u.id === this.pickleMan.value);
+          const UTASecretRoles = userToAddRole!.secretRoles === undefined ? [] : userToAddRole!.secretRoles;
+          UTASecretRoles.push(this.pickleName);
+          this.firestoreService.updateUserSecretRoles(userToAddRole!.id!, UTASecretRoles);
+          this.existingPickleMan = userToAddRole!.firstName;
+        }
+      });
+    }
   }
 
   toggleEventSuspension() {
@@ -105,7 +212,20 @@ export class StuntHistoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async result => {
       if (result) {
-        this.users.forEach(user => this.firestoreService.updateUserStuntsHidden(user.id!, this.areStuntsHidden));
+        if(this.areStuntsHidden) {
+          this.users.forEach(user => {
+            const secretRoles = user.secretRoles === undefined ? [] : user.secretRoles;
+            secretRoles.push(this.jobStuntName);
+            this.firestoreService.updateUserStuntsHiddenAndSecretRoles(user.id!, this.areStuntsHidden, secretRoles);
+          });
+        } else {
+          this.users.forEach(user => {
+            let secretRoles = user.secretRoles === undefined ? [] : user.secretRoles;
+            secretRoles = secretRoles.filter(stuntName => stuntName === this.jobStuntName);
+            this.firestoreService.updateUserStuntsHiddenAndSecretRoles(user.id!, this.areStuntsHidden, secretRoles);
+          });
+        }
+
         this.areStuntsHidden = !this.areStuntsHidden
       }
     });

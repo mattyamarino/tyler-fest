@@ -58,7 +58,7 @@ export class ParentComponent implements OnInit {
       user.score = 0;
 
       user.performances!.forEach((performance: PerformStunt) => {
-        if (!performance.isDeleted) {
+        if (!performance.isDeleted && (!performance.isSecretRoleStunt || user.showHidden)) {
           user.score = user.score! + performance.points;
         }
       });

@@ -13,6 +13,7 @@ export class User {
   isSuspended?: boolean;
   showHidden?: boolean;
   messages?: SnackbarMessage[];
+  secretRoles?: string[];
 }
 
 export class PerformStunt {
@@ -23,6 +24,7 @@ export class PerformStunt {
   points!: number;
   stuntName!: string;
   isDeleted?: boolean;
+  isSecretRoleStunt?: boolean;
 }
 
 export class Stunt {

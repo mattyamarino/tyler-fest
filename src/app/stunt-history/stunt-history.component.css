@@ -27,6 +27,11 @@
   margin-bottom: 17px;
 }
 
+.role-button {
+  width: 80%;
+  margin-bottom: 17px;
+}
+
 
 .title {
   font-family: 'lemon_bold', 'arial', sans-serif;
@@ -91,3 +96,15 @@
   text-align: center;
   align-self: center;
 }
+
+.select {
+  margin-top: 17px;
+  max-width: 80%;
+  width: 80%;
+  margin: auto;
+}
+
+.label {
+  font-size: 11px;
+}
+

@@ -1,6 +1,6 @@
 <div class="container">
   <div *ngFor="let stunt of stunts">
-    <div class="stunt-card" (click)="openCard(stunt)">
+    <div class="stunt-card" (click)="openCard(stunt)" *ngIf="showStunt(stunt)">
     
       <mat-grid-list cols="4" rowHeight="15px">
   

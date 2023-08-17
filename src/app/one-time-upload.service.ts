@@ -310,7 +310,7 @@ export class OneTimeUploadService {
     rules: 'Talk for two minutes on a topic picked from the box.  Enter judges score below',
     maxUses: 1,
     points: [1, 3],
-    icon: 'conference',
+    icon: 'public-speaking',
     judgedEvent: true,
     messages: [
       {
@@ -466,7 +466,7 @@ export class OneTimeUploadService {
 
   hardcodedStunt13: Stunt = {
     name: 'Hide an Ice',
-    rules: 'The rules are on your card.  IMPORTANT: points for this are hidden until the end of the weekend, and submissions wont appear in the spectator view either (to aid you in your secret mission).   Also only you can see this stunt, so dont share your screen!',
+    rules: 'The rules are on your card. \n\nIMPORTANT: points for this are hidden until the end of the weekend, and submissions wont appear in the spectator view either (to aid you in your secret mission).   Also only you can see this stunt, so dont share your screen!',
     maxUses: 3,
     points: [1],
     icon: 'ice',
@@ -489,7 +489,7 @@ export class OneTimeUploadService {
 
   hardcodedStunt14: Stunt = {
     name: 'Pickle',
-    rules: 'The rules are on your card.  IMPORTANT: points for this are hidden until the end of the weekend, and submissions wont appear in the spectator view either (to aid you in your secret mission).   Also only you can see this stunt, so dont share your screen!',
+    rules: 'The rules are on your card.  \n\nIMPORTANT: points for this are hidden until the end of the weekend, and submissions wont appear in the spectator view either (to aid you in your secret mission).   Also only you can see this stunt, so dont share your screen!',
     maxUses: 3,
     points: [1],
     icon: 'pickle',

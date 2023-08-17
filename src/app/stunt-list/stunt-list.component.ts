@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Stunt } from '../models/models';
+import { Stunt, User } from '../models/models';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -11,6 +11,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class StuntListComponent implements OnInit {
   @Input()
   stunts: Stunt[] = [];
+
+  @Input()
+  activeUser: User = new User();
 
   @Output() 
   stuntEvent = new EventEmitter<Stunt>();
@@ -69,5 +72,23 @@ export class StuntListComponent implements OnInit {
     return 0;
   }
 
+  showStunt(stunt: Stunt): boolean {
+    
+    if(stunt.secretRoleStunt) {
+      let ret = false;
+
+      if(this.activeUser.secretRoles !== undefined) {
+        this.activeUser.secretRoles.forEach(stuntName => {
+          if(stuntName === stunt.name) {
+            ret = true;
+          }
+        });
+      }
+      
+      return ret;
+    }
+
+    return true;
+  }
 
 }

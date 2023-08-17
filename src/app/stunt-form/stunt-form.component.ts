@@ -30,7 +30,7 @@ export class StuntFormComponent implements OnInit {
   stuntForm = new FormGroup({
     witness: new FormControl(''),
     description: new FormControl(''),
-    points: new FormControl(0)
+    points: new FormControl(-100)
   });
 
   saving = false;
@@ -126,7 +126,8 @@ export class StuntFormComponent implements OnInit {
         stuntId: this.activeStunt.id!,
         timestamp: Date.now(),
         points: pointsToSave,
-        stuntName: this.activeStunt.name
+        stuntName: this.activeStunt.name,
+        isSecretRoleStunt: this.activeStunt.secretRoleStunt
       }
 
       this.pastPerformances.push(performStunt);
@@ -163,7 +164,8 @@ export class StuntFormComponent implements OnInit {
 
   getPointStr(pointsValue: number, isForJudgedEvent?: boolean): string {
     if (isForJudgedEvent) {
-      return `${this.judgedPoints[0]}-${this.judgedPoints[this.judgedPoints.length - 1]}pts`
+      const startRange = this.judgedPoints[0] < 0 ? `(${this.judgedPoints[0]})` : this.judgedPoints[0]
+      return `${startRange}-${this.judgedPoints[this.judgedPoints.length - 1]}pts`
     }
 
     return pointsValue !== 1 ? 'pts' : 'pt'

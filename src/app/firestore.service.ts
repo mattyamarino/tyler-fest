@@ -58,10 +58,23 @@ export class FirestoreService {
       });
   }
 
-
-  updateUserStuntsHidden(id: string, showHidden: boolean) {
+  updateUserSecretRoles(id: string, secretRoles: string[]) {
     return this.firestore.collection('users').doc(id).update({
-      showHidden: showHidden
+      secretRoles: secretRoles
+    })
+      .then(() => {
+        console.log("User " + id + " successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+  }
+
+
+  updateUserStuntsHiddenAndSecretRoles(id: string, showHidden: boolean, secretRoles: string[]) {
+    return this.firestore.collection('users').doc(id).update({
+      showHidden: showHidden,
+      secretRoles: secretRoles
     })
       .then(() => {
         console.log("User " + id + " successfully updated!");

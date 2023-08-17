@@ -9,7 +9,7 @@
         </span>
       </button>
     </div>
-  
+
     <div class="button-container">
       <button mat-raised-button color="primary" class="button" (click)="toggleMysteryEvent()">
         <span class="button-label">
@@ -17,6 +17,46 @@
         </span>
       </button>
     </div>
+
+    <br><br>
+
+    <div class="button-container">
+      <mat-form-field class="select">
+        <mat-label class="label">Ice Man</mat-label>
+        <mat-select [formControl]="iceMan" placeholder="select the ice man" class="label">
+          <mat-option *ngFor="let user of users" [value]="user.id" class="label">
+            {{user.firstName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <button mat-raised-button color="primary" class="role-button" [disabled]="hideSecretRoleButton(iceName)" (click)="updateIceMan(iceName)">
+        <span class="button-label">
+          Change Ice Man
+        </span>
+      </button>
+    </div>
+
+    <br><br>
+
+    <div class="button-container">
+      <mat-form-field class="select">
+        <mat-label class="label">Pickle Man</mat-label>
+        <mat-select [formControl]="pickleMan" placeholder="select the pickle man" class="label">
+          <mat-option *ngFor="let user of users" [value]="user.id" class="label">
+            {{user.firstName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <button mat-raised-button color="primary" class="role-button" [disabled]="hideSecretRoleButton(pickleName)" (click)="updatePickleMan(pickleName)">
+        <span class="button-label">
+          Change Pickle Man
+        </span>
+      </button>
+    </div>
+
+    <br><br>
 
   </div>
 
@@ -30,41 +70,44 @@
     </div>
 
     <div *ngFor="let performStunt of user.performances; let i = index;">
-      <div [ngClass]="{'odd-performance': (i % 2 !== 0) }">
-        <div [ngClass]="performStunt.isDeleted ? 'deleted-performance' : 'performance'">
-          
-          <div class="performance-info">
-            <div class="stunt-name data">
-              {{ performStunt.stuntName }}
-            </div>
-            <div class="data">
-              {{ performStunt.timestamp | date:'medium' }}
-            </div>
-            <div class="data">
-              {{ performStunt.points + getPointStr(performStunt.points) }}
-            </div>
-            <div class="data">
-              Witness: &nbsp;{{ getWitnessName(performStunt.witnessId) }}
-            </div>
-            <div class="data">
-              {{ performStunt.description }}
-            </div>
-          </div>
+      <div *ngIf="!performStunt.isSecretRoleStunt || activeUser.id === 'admin'">
 
-          <div *ngIf="!performStunt.isDeleted && activeUser.id === 'admin' && performStunt.stuntName !== 'Beer Pong' && performStunt.stuntName !== 'Flip Cup'"  
-          (click)="deletePerformStunt(user.id!, performStunt, true)" 
-          class="action-icon">
-            <mat-icon>delete</mat-icon>
-          </div>
-    
-          <!-- <div *ngIf="performStunt.isDeleted && !user.isSuspended && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, false)" class="action-icon">
+
+        <div [ngClass]="{'odd-performance': (i % 2 !== 0) }">
+          <div [ngClass]="performStunt.isDeleted ? 'deleted-performance' : 'performance'">
+
+            <div class="performance-info">
+              <div class="stunt-name data">
+                {{ performStunt.stuntName }}
+              </div>
+              <div class="data">
+                {{ performStunt.timestamp | date:'medium' }}
+              </div>
+              <div class="data">
+                {{ performStunt.points + getPointStr(performStunt.points) }}
+              </div>
+              <div class="data">
+                Witness: &nbsp;{{ getWitnessName(performStunt.witnessId) }}
+              </div>
+              <div class="data">
+                {{ performStunt.description }}
+              </div>
+            </div>
+
+            <div
+              *ngIf="!performStunt.isDeleted && activeUser.id === 'admin' && performStunt.stuntName !== 'Beer Pong' && performStunt.stuntName !== 'Flip Cup'"
+              (click)="deletePerformStunt(user.id!, performStunt, true)" class="action-icon">
+              <mat-icon>delete</mat-icon>
+            </div>
+
+            <!-- <div *ngIf="performStunt.isDeleted && !user.isSuspended && activeUser.id === 'admin'" (click)="deletePerformStunt(user.id!, performStunt, false)" class="action-icon">
             <mat-icon>settings_backup_restore</mat-icon>
           </div> -->
 
-        </div>
+          </div>
 
+        </div>
       </div>
     </div>
   </div>
 </div>
-
