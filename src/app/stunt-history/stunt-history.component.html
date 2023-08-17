@@ -70,7 +70,7 @@
     </div>
 
     <div *ngFor="let performStunt of user.performances; let i = index;">
-      <div *ngIf="!performStunt.isSecretRoleStunt || activeUser.id === 'admin'">
+      <div *ngIf="!performStunt.isSecretRoleStunt || user.showHidden || activeUser.id === 'admin'">
 
 
         <div [ngClass]="{'odd-performance': (i % 2 !== 0) }">

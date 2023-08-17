@@ -214,15 +214,15 @@ export class StuntHistoryComponent implements OnInit {
       if (result) {
         if(this.areStuntsHidden) {
           this.users.forEach(user => {
-            const secretRoles = user.secretRoles === undefined ? [] : user.secretRoles;
-            secretRoles.push(this.jobStuntName);
-            this.firestoreService.updateUserStuntsHiddenAndSecretRoles(user.id!, this.areStuntsHidden, secretRoles);
+            const rolesFilter = user.secretRoles === undefined ? [] : user.secretRoles;
+            rolesFilter.push(this.jobStuntName);
+            this.firestoreService.updateUserStuntsHiddenAndSecretRoles(user.id!, this.areStuntsHidden, rolesFilter);
           });
         } else {
           this.users.forEach(user => {
-            let secretRoles = user.secretRoles === undefined ? [] : user.secretRoles;
-            secretRoles = secretRoles.filter(stuntName => stuntName === this.jobStuntName);
-            this.firestoreService.updateUserStuntsHiddenAndSecretRoles(user.id!, this.areStuntsHidden, secretRoles);
+            let rolesWithAddition = user.secretRoles === undefined ? [] : user.secretRoles;
+            rolesWithAddition = rolesWithAddition.filter(stuntName => stuntName !== this.jobStuntName);
+            this.firestoreService.updateUserStuntsHiddenAndSecretRoles(user.id!, this.areStuntsHidden, rolesWithAddition);
           });
         }
 

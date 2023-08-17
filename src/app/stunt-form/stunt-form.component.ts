@@ -85,7 +85,9 @@ export class StuntFormComponent implements OnInit {
   }
 
   getWitnessName(witnessId: string): string {
-    return this.witnesses.find(u => u.id === witnessId)!.firstName;
+    const witness = this.witnesses.find(u => u.id === witnessId);
+
+    return witness ? witness.firstName : this.activeUser.firstName;
   }
 
   closeStunt(): void {
@@ -102,9 +104,10 @@ export class StuntFormComponent implements OnInit {
   }
 
   isDisabled(): boolean {
-    let judgedPointsInvalid = this.activeStunt.judgedEvent ? this.stuntForm.get('points')?.value === 0 : false
+    let judgedPointsInvalid = this.activeStunt.judgedEvent ? this.stuntForm.get('points')?.value === -100 : false
+    const validWitness = this.activeStunt.secretRoleStunt ? false : this.stuntForm.get('witness')?.value === ''
 
-    return this.stuntForm.get('witness')?.value === '' || this.stuntForm.get('description')?.value === '' || judgedPointsInvalid ? true : false;
+    return  (validWitness || this.stuntForm.get('description')?.value === '' || judgedPointsInvalid) ? true : false;
   }
 
   showStunt(): boolean {
@@ -119,9 +122,10 @@ export class StuntFormComponent implements OnInit {
     if (!this.saving) {
       this.saving = true;
       const pointsToSave = this.activeStunt.judgedEvent ? this.stuntForm.get('points')!.value! : this.points;
+      const witness = this.activeStunt.secretRoleStunt ? this.activeUser.id! : this.getUserId(this.stuntForm.get('witness')!.value!)!
 
       const performStunt = {
-        witnessId: this.getUserId(this.stuntForm.get('witness')!.value!)!,
+        witnessId: witness,
         description: this.stuntForm.get('description')!.value!.trim(),
         stuntId: this.activeStunt.id!,
         timestamp: Date.now(),
